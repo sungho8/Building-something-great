@@ -40,7 +40,18 @@ app_factory/
 
 - [x] 모노레포 골격 세팅 (Dart workspace + Melos 7, design_system·core·dday 연결, analyze/test 통과)
 - [~] design_system: 골격 + 코어(BrandConfig/AppFactory/AppButton/AppCard/AppSpacing) 구현. 토큰·컴포넌트 확장 필요
-- [ ] D-Day MVP 범위 확정 및 개발 시작
+- [~] D-Day MVP 개발 중:
+  - [x] 목록 / 추가·편집 화면 (Riverpod 상태관리)
+  - [x] 로컬 저장 (core `LocalStore`, shared_preferences)
+  - [x] 알림 (core `NotificationService`, D-Day 당일 오전 9시)
+  - [x] 홈 위젯 — Android 완료 (APK 빌드 통과). iOS는 Xcode 작업 필요 → `docs/HOME_WIDGET.md`
+  - [ ] AdMob 광고 붙이기 (수익화) — 미착수
+  - [ ] 스토어 등록·심사 — 미착수
+
+### 추가된 의존성
+- core: shared_preferences, flutter_local_notifications, timezone, flutter_timezone
+- dday: flutter_riverpod, home_widget, intl
+- Android: core library desugaring 활성화(build.gradle.kts), POST_NOTIFICATIONS 권한
 
 ### 워크스페이스 사용법
 - 설치: `dart pub global activate melos` (PATH에 `~/.pub-cache/bin` 추가)
