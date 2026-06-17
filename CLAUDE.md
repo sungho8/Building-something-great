@@ -38,9 +38,15 @@ app_factory/
 
 ## 현재 상태
 
-- [ ] 모노레포 골격 세팅 (melos + design_system + core + dday 연결)
-- [ ] design_system 구체 설계
+- [x] 모노레포 골격 세팅 (Dart workspace + Melos 7, design_system·core·dday 연결, analyze/test 통과)
+- [~] design_system: 골격 + 코어(BrandConfig/AppFactory/AppButton/AppCard/AppSpacing) 구현. 토큰·컴포넌트 확장 필요
 - [ ] D-Day MVP 범위 확정 및 개발 시작
+
+### 워크스페이스 사용법
+- 설치: `dart pub global activate melos` (PATH에 `~/.pub-cache/bin` 추가)
+- 의존성 일괄: `melos bootstrap`
+- 분석/테스트: `melos run analyze` / `melos run test --no-select`
+- dday 실행: `cd apps/dday && flutter run`
 
 ## 도구
 
