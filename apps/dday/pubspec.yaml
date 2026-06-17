@@ -16,10 +16,15 @@ dependencies:
   design_system: ^0.0.1
   core: ^0.0.1
 
+  flutter_riverpod: ^2.5.1
+  home_widget: ^0.7.0
+  intl: ^0.20.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  shared_preferences: ^2.3.0 # 위젯 테스트에서 직접 사용
 
 flutter:
   uses-material-design: true

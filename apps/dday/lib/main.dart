@@ -1,50 +1,42 @@
+import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
+import 'providers/dday_providers.dart';
+import 'screens/dday_list_screen.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final store = await LocalStore.create();
+  final notifications = await NotificationService.create();
+  await notifications.requestPermissions();
+
   runApp(
-    const AppFactory(
+    ProviderScope(
+      overrides: [
+        localStoreProvider.overrideWithValue(store),
+        notificationServiceProvider.overrideWithValue(notifications),
+      ],
+      child: const DDayApp(),
+    ),
+  );
+}
+
+class DDayApp extends StatelessWidget {
+  const DDayApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const AppFactory(
       brand: BrandConfig(
         seed: Color(0xFFFF7AA2), // 말랑한 핑크 — D-Day의 정체성
         radius: 16,
         vibe: Vibe.soft,
       ),
       title: 'D-Day',
-      home: DDayHome(),
-    ),
-  );
-}
-
-class DDayHome extends StatelessWidget {
-  const DDayHome({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
-    return Scaffold(
-      appBar: AppBar(title: const Text('D-Day')),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.lg),
-          child: AppCard(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('🏭 App Factory', style: textTheme.titleLarge),
-                AppSpacing.gapSm,
-                Text('첫 제품: D-Day 카운터', style: textTheme.bodyMedium),
-                AppSpacing.gapLg,
-                AppButton(
-                  label: '시작하기',
-                  icon: Icons.add,
-                  onPressed: () {},
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      home: DDayListScreen(),
     );
   }
 }
