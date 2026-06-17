@@ -1,0 +1,35 @@
+name: app_factory
+publish_to: none
+
+# Dart pub workspace — 멤버 패키지들을 한 번에 resolve.
+# design_system 한 줄 고치면 모든 앱이 즉시 반영된다.
+environment:
+  sdk: ^3.11.5
+
+workspace:
+  - packages/design_system
+  - packages/core
+  - apps/dday
+
+dev_dependencies:
+  melos: ^7.8.2
+
+melos:
+  scripts:
+    analyze:
+      description: 모든 패키지 정적 분석
+      run: dart analyze .
+      exec:
+        concurrency: 1
+    test:
+      description: 테스트가 있는 패키지만 테스트 실행
+      run: flutter test
+      exec:
+        concurrency: 1
+      packageFilters:
+        dirExists: test
+    format:
+      description: 전체 코드 포맷
+      run: dart format .
+      exec:
+        concurrency: 1
