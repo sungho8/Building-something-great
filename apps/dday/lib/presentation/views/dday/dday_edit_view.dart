@@ -2,24 +2,28 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/dday_item.dart';
-import '../providers/dday_providers.dart';
-import '../utils/date_format.dart';
+import '../../../di/dday_providers.dart';
+import '../../../domain/entities/dday_item.dart';
+import '../../../utils/date_format.dart';
 
 /// D-Day 추가/편집 화면. item이 null이면 신규.
-class DDayEditScreen extends ConsumerStatefulWidget {
-  const DDayEditScreen({super.key, this.item});
+class DDayEditView extends ConsumerStatefulWidget {
+  const DDayEditView({super.key, this.item});
 
   final DDayItem? item;
 
   @override
-  ConsumerState<DDayEditScreen> createState() => _DDayEditScreenState();
+  ConsumerState<DDayEditView> createState() => _DDayEditViewState();
 }
 
-class _DDayEditScreenState extends ConsumerState<DDayEditScreen> {
+class _DDayEditViewState extends ConsumerState<DDayEditView> {
+  // 제목 입력 컨트롤러
   late final TextEditingController _titleController;
+
+  // 선택된 날짜
   late DateTime _date;
 
+  // 편집 모드 여부
   bool get _isEditing => widget.item != null;
 
   @override
@@ -35,6 +39,7 @@ class _DDayEditScreenState extends ConsumerState<DDayEditScreen> {
     super.dispose();
   }
 
+  // 날짜 선택 다이얼로그
   Future<void> _pickDate() async {
     final picked = await showDatePicker(
       context: context,
@@ -45,6 +50,7 @@ class _DDayEditScreenState extends ConsumerState<DDayEditScreen> {
     if (picked != null) setState(() => _date = picked);
   }
 
+  // 저장 (신규 추가 또는 수정)
   Future<void> _save() async {
     final title = _titleController.text.trim();
     if (title.isEmpty) {
@@ -54,17 +60,18 @@ class _DDayEditScreenState extends ConsumerState<DDayEditScreen> {
       return;
     }
 
-    final notifier = ref.read(ddayListProvider.notifier);
+    final viewModel = ref.read(ddayListProvider.notifier);
     if (_isEditing) {
-      await notifier.update(widget.item!.copyWith(title: title, date: _date));
+      await viewModel.update(widget.item!.copyWith(title: title, date: _date));
     } else {
-      await notifier.add(DDayItem.create(title: title, date: _date));
+      await viewModel.add(title: title, date: _date);
     }
 
     if (!mounted) return;
     Navigator.of(context).pop();
   }
 
+  // 삭제
   Future<void> _delete() async {
     await ref.read(ddayListProvider.notifier).remove(widget.item!.id);
     if (!mounted) return;
@@ -98,7 +105,9 @@ class _DDayEditScreenState extends ConsumerState<DDayEditScreen> {
                 border: OutlineInputBorder(),
               ),
             ),
+
             AppSpacing.gapLg,
+
             AppCard(
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
@@ -109,7 +118,9 @@ class _DDayEditScreenState extends ConsumerState<DDayEditScreen> {
                 onTap: _pickDate,
               ),
             ),
+
             const Spacer(),
+
             AppButton(label: '저장', icon: Icons.check, onPressed: _save),
           ],
         ),

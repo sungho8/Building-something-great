@@ -33,3 +33,10 @@ melos:
       run: dart format .
       exec:
         concurrency: 1
+    gen:
+      description: build_runner 코드 생성 (freezed·json 사용 패키지)
+      run: dart run build_runner build
+      exec:
+        concurrency: 1
+      packageFilters:
+        dependsOn: build_runner

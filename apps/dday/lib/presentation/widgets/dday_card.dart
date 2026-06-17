@@ -1,8 +1,8 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../models/dday_item.dart';
-import '../utils/date_format.dart';
+import '../../domain/entities/dday_item.dart';
+import '../../utils/date_format.dart';
 
 /// D-Day 한 건을 카드로 표시. 제목·날짜 + 큰 라벨(D-N).
 class DDayCard extends StatelessWidget {
@@ -28,7 +28,9 @@ class DDayCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(item.title, style: theme.textTheme.titleMedium),
+
                     AppSpacing.gapSm,
+
                     Text(
                       formatDdayDate(item.date),
                       style: theme.textTheme.bodySmall
@@ -37,6 +39,7 @@ class DDayCard extends StatelessWidget {
                   ],
                 ),
               ),
+
               Text(
                 item.label,
                 style: theme.textTheme.headlineSmall?.copyWith(

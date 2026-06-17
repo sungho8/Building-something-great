@@ -23,18 +23,28 @@
 app_factory/
 ├── packages/
 │   ├── design_system/   ← 브랜드 무지한 공용 위젯·토큰 (BrandConfig 주입)
-│   └── core/            ← 광고·저장·분석·설정화면 공용 인프라
+│   └── core/            ← 저장·알림·(예정)광고·분석 공용 인프라
 ├── apps/
-│   ├── dday/
+│   ├── dday/            ← 경량 3계층 (domain/data/presentation) + Riverpod
 │   └── subscription/
 └── gallery/             ← Widgetbook (컴포넌트 전시장)
 ```
+
+## 코드 컨벤션 — `docs/CONVENTIONS.md` (필수)
+
+코드 작성·수정 전 **`docs/CONVENTIONS.md`를 따른다.** 핵심:
+- **경량 3계층 + Riverpod**: domain(entities·repositories) / data(repositories impl) / presentation(viewmodels·views·widgets) + di/
+- 서버 없는 앱이라 **UseCase·Either·State클래스는 trivial하면 생략** (불필요한 추상화 금지)
+- freezed 3.x 엔티티, 수정 후 `melos run gen` (build_runner)
+- Provider 접근은 View에서만, 정의는 `di/`에
+- 주석 필수(/// public, // private), 하드코딩 금지(토큰 사용), `withValues(alpha:)`, InkWell(¬GestureDetector)
 
 ## 핵심 원칙
 
 - `design_system` 위젯은 색·폰트를 **모른다** → `Theme.of(context)`만 본다
 - 각 앱은 시작 시 `BrandConfig(seed, font, radius, vibe)`만 주입
 - `design_system` 시그니처가 깨지면 **모든 앱이 동시에** 깨진다 → 안정화 후 함부로 바꾸지 않는다
+- 공용으로 쓰는 것(저장·알림 등)은 앱이 아니라 `packages/core`에
 
 ## 현재 상태
 
@@ -57,6 +67,7 @@ app_factory/
 - 설치: `dart pub global activate melos` (PATH에 `~/.pub-cache/bin` 추가)
 - 의존성 일괄: `melos bootstrap`
 - 분석/테스트: `melos run analyze` / `melos run test --no-select`
+- 코드 생성(freezed): `melos run gen`
 - dday 실행: `cd apps/dday && flutter run`
 
 ## 도구
@@ -73,4 +84,7 @@ app_factory/
 ## 문서
 
 - 전략 전체: `docs/PLANNING.md`
+- 코드 컨벤션: `docs/CONVENTIONS.md`
+- 알려진 이슈·보류: `docs/KNOWN_ISSUES.md`
+- 홈 위젯 설정: `docs/HOME_WIDGET.md`
 - Notion 대시보드: https://github.com/sungho8/Building-something-great

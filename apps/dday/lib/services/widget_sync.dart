@@ -1,6 +1,6 @@
 import 'package:home_widget/home_widget.dart';
 
-import '../models/dday_item.dart';
+import '../domain/entities/dday_item.dart';
 
 /// 홈 위젯에 "가장 임박한 D-Day"를 노출한다.
 ///

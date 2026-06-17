@@ -1,6 +1,6 @@
 import 'package:core/core.dart';
-import 'package:dday/providers/dday_providers.dart';
-import 'package:dday/screens/dday_list_screen.dart';
+import 'package:dday/di/dday_providers.dart';
+import 'package:dday/presentation/views/dday/dday_list_view.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +17,7 @@ void main() {
         overrides: [localStoreProvider.overrideWithValue(store)],
         child: const AppFactory(
           brand: BrandConfig(seed: Color(0xFFFF7AA2)),
-          home: DDayListScreen(),
+          home: DDayListView(),
         ),
       ),
     );

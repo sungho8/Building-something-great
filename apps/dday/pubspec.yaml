@@ -19,12 +19,17 @@ dependencies:
   flutter_riverpod: ^2.5.1
   home_widget: ^0.7.0
   intl: ^0.20.0
+  freezed_annotation: ^3.0.0
+  json_annotation: ^4.12.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
   shared_preferences: ^2.3.0 # 위젯 테스트에서 직접 사용
+  build_runner: ^2.4.13
+  freezed: ^3.0.0
+  json_serializable: ^6.8.0
 
 flutter:
   uses-material-design: true
