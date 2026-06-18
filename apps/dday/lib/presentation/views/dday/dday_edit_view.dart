@@ -80,7 +80,7 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppScaffold(
       appBar: AppBar(
         title: Text(_isEditing ? '편집' : '새 D-Day'),
         actions: [
@@ -102,7 +102,6 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
               decoration: const InputDecoration(
                 labelText: '제목',
                 hintText: '예: 수능, 결혼기념일',
-                border: OutlineInputBorder(),
               ),
             ),
 
@@ -121,7 +120,12 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
 
             const Spacer(),
 
-            AppButton(label: '저장', icon: Icons.check, onPressed: _save),
+            AppButton(
+              label: '저장',
+              leadingIcon: Icons.check,
+              expand: true,
+              onPressed: _save,
+            ),
           ],
         ),
       ),

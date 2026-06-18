@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 /// 색 토큰 — EggSchool 디자인 시스템 Primitive에서 자동 생성 (정확값).
 ///
 /// 구조 원칙:
@@ -7,6 +5,8 @@ import 'package:flutter/material.dart';
 /// - [AppPrimary]는 기본 브랜드(Egg Purple). 앱별 브랜드는 BrandConfig→Theme로 교체하고,
 ///   이 스케일은 기본/참조용으로 둔다.
 library;
+
+import 'package:flutter/material.dart';
 
 /// 공통 색
 abstract final class AppCommon {

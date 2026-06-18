@@ -16,7 +16,7 @@ class DDayListView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final items = ref.watch(ddayListProvider);
 
-    return Scaffold(
+    return AppScaffold(
       appBar: AppBar(title: const Text('D-Day')),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _openEdit(context),

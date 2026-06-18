@@ -1,30 +1,131 @@
 import 'package:flutter/material.dart';
 
-/// 브랜드 무지한 기본 버튼.
+import '../tokens/radius.dart';
+import '../tokens/spacing.dart';
+import '../tokens/typography.dart';
+
+/// 버튼 크기 (높이 48/42/36/32).
+enum AppButtonSize { lg, md, sm, xs }
+
+/// 버튼 변형. primary=채움 / secondary=외곽선 / tertiary=텍스트.
+enum AppButtonVariant { primary, secondary, tertiary }
+
+/// 디자인 시스템 버튼.
 ///
-/// 색·모서리·패딩은 모두 `Theme.of(context)`에서 자동으로 가져온다.
-/// 즉 어느 앱에 놓이느냐에 따라 외모가 달라진다.
+/// 색은 Theme(브랜드)에서, 크기·간격·반경은 토큰에서 가져온다.
+/// hover/pressed/disabled 상태는 Material이 자동 처리한다.
 class AppButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
-  final IconData? icon;
+  final AppButtonSize size;
+  final AppButtonVariant variant;
+  final IconData? leadingIcon;
+  final IconData? trailingIcon;
+
+  /// 가로로 꽉 채울지.
+  final bool expand;
+
+  /// 모서리 반경. 기본 [AppRadius.lg].
+  final double borderRadius;
 
   const AppButton({
     super.key,
     required this.label,
     this.onPressed,
-    this.icon,
+    this.size = AppButtonSize.lg,
+    this.variant = AppButtonVariant.primary,
+    this.leadingIcon,
+    this.trailingIcon,
+    this.expand = false,
+    this.borderRadius = AppRadius.lg,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (icon != null) {
-      return FilledButton.icon(
-        onPressed: onPressed,
-        icon: Icon(icon),
-        label: Text(label),
-      );
-    }
-    return FilledButton(onPressed: onPressed, child: Text(label));
+    final spec = _specOf(size);
+    final primary = Theme.of(context).colorScheme.primary;
+    final shape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(borderRadius),
+    );
+    final textStyle = TextStyle(
+      fontSize: spec.fontSize,
+      fontWeight: AppFontWeight.semiBold,
+    );
+    final child = _child(spec);
+
+    final Widget button = switch (variant) {
+      AppButtonVariant.primary => FilledButton(
+          onPressed: onPressed,
+          style: FilledButton.styleFrom(
+            minimumSize: Size(0, spec.height),
+            padding: EdgeInsets.symmetric(horizontal: spec.hPad),
+            textStyle: textStyle,
+            shape: shape,
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          child: child,
+        ),
+      AppButtonVariant.secondary => OutlinedButton(
+          onPressed: onPressed,
+          style: OutlinedButton.styleFrom(
+            minimumSize: Size(0, spec.height),
+            padding: EdgeInsets.symmetric(horizontal: spec.hPad),
+            textStyle: textStyle,
+            shape: shape,
+            side: BorderSide(color: primary),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          child: child,
+        ),
+      AppButtonVariant.tertiary => TextButton(
+          onPressed: onPressed,
+          style: TextButton.styleFrom(
+            minimumSize: Size(0, spec.height),
+            padding: EdgeInsets.symmetric(horizontal: spec.hPad),
+            textStyle: textStyle,
+            shape: shape,
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          child: child,
+        ),
+    };
+
+    return expand ? SizedBox(width: double.infinity, child: button) : button;
   }
+
+  // 라벨 + 옵션 아이콘 구성
+  Widget _child(_SizeSpec spec) {
+    if (leadingIcon == null && trailingIcon == null) return Text(label);
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (leadingIcon != null) ...[
+          Icon(leadingIcon, size: spec.iconSize),
+          const SizedBox(width: AppSpacing.s6),
+        ],
+        Text(label),
+        if (trailingIcon != null) ...[
+          const SizedBox(width: AppSpacing.s6),
+          Icon(trailingIcon, size: spec.iconSize),
+        ],
+      ],
+    );
+  }
+
+  _SizeSpec _specOf(AppButtonSize s) => switch (s) {
+        // ⚠️ fontSize는 타입 스케일 수령 전 임시값. 스케일 오면 여기서 교체.
+        AppButtonSize.lg => const _SizeSpec(48, 20, 16, 20),
+        AppButtonSize.md => const _SizeSpec(42, 16, 15, 18),
+        AppButtonSize.sm => const _SizeSpec(36, 14, 14, 16),
+        AppButtonSize.xs => const _SizeSpec(32, 12, 13, 16),
+      };
+}
+
+class _SizeSpec {
+  final double height;
+  final double hPad;
+  final double fontSize;
+  final double iconSize;
+
+  const _SizeSpec(this.height, this.hPad, this.fontSize, this.iconSize);
 }

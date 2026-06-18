@@ -7,6 +7,7 @@ library;
 export 'src/app_factory.dart';
 export 'src/components/app_button.dart';
 export 'src/components/app_card.dart';
+export 'src/components/app_scaffold.dart';
 export 'src/theme/app_theme.dart';
 export 'src/theme/brand_config.dart';
 export 'src/tokens/colors.dart';
