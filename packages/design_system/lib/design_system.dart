@@ -10,5 +10,6 @@ export 'src/components/app_card.dart';
 export 'src/theme/app_theme.dart';
 export 'src/theme/brand_config.dart';
 export 'src/tokens/colors.dart';
+export 'src/tokens/radius.dart';
 export 'src/tokens/spacing.dart';
 export 'src/tokens/typography.dart';
