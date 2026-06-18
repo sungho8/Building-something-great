@@ -11,7 +11,8 @@ class DDayApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const AppFactory(
       brand: BrandConfig(
-        seed: Color(0xFFFF7AA2), // 말랑한 핑크 — D-Day의 정체성
+        seed: Color(0xFFFF5B7F), // 비비드 코랄핑크 — 포인트
+        background: Color(0xFFFFF1F4), // 블러시 핑크 — 따뜻한 배경 무드
         radius: 16,
         vibe: Vibe.soft,
       ),

@@ -5,8 +5,10 @@ import 'brand_config.dart';
 
 /// [BrandConfig] → [ThemeData].
 ///
-/// 디자인 시스템의 단일 관문. 브랜드(Primary)는 앱별 seed에서, 중립·텍스트·테두리·
-/// 에러색은 EggSchool 공유 토큰에서 가져온다. 컴포넌트는 여기서 나온 Theme만 본다.
+/// 디자인 시스템의 단일 관문.
+/// - Primary는 브랜드 seed **원색 그대로** (M3 fromSeed의 톤 다운을 피해 선명하게).
+/// - 배경은 브랜드 무드색(없으면 중립 회색).
+/// - 중립·텍스트·테두리·에러는 EggSchool 공유 토큰.
 ThemeData buildTheme(BrandConfig brand, Brightness brightness) {
   final isLight = brightness == Brightness.light;
   final base = ColorScheme.fromSeed(
@@ -14,9 +16,15 @@ ThemeData buildTheme(BrandConfig brand, Brightness brightness) {
     brightness: brightness,
   );
 
-  // 라이트 모드는 공유 토큰으로 중립색 역할을 고정해 완성도를 맞춘다.
+  // 브랜드 원색을 primary로 고정 (선명함 유지).
+  final brandScheme = base.copyWith(
+    primary: brand.seed,
+    onPrimary: AppCommon.white,
+  );
+
+  // 라이트 모드는 공유 토큰으로 중립색 역할을 고정.
   final scheme = isLight
-      ? base.copyWith(
+      ? brandScheme.copyWith(
           surface: AppCommon.white,
           onSurface: AppText.s900,
           onSurfaceVariant: AppText.s500,
@@ -27,21 +35,27 @@ ThemeData buildTheme(BrandConfig brand, Brightness brightness) {
           surfaceContainerLow: AppNeutral.s50,
           surfaceContainer: AppNeutral.s100,
         )
-      : base;
+      : brandScheme;
 
+  final background =
+      brand.background ?? (isLight ? AppNeutral.s50 : scheme.surface);
   final cardRadius = BorderRadius.circular(brand.radius);
 
   return ThemeData(
     useMaterial3: true,
     colorScheme: scheme,
     fontFamily: brand.fontFamily,
-    scaffoldBackgroundColor: isLight ? AppNeutral.s50 : scheme.surface,
+    scaffoldBackgroundColor: background,
     appBarTheme: AppBarTheme(
-      backgroundColor: isLight ? AppNeutral.s50 : scheme.surface,
+      backgroundColor: background,
       foregroundColor: isLight ? AppText.s900 : scheme.onSurface,
       elevation: 0,
       scrolledUnderElevation: 0.5,
       centerTitle: false,
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: scheme.primary,
+      foregroundColor: scheme.onPrimary,
     ),
     cardTheme: CardThemeData(
       color: isLight ? AppCommon.white : null,
