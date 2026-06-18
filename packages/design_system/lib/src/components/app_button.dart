@@ -25,7 +25,7 @@ class AppButton extends StatelessWidget {
   /// 가로로 꽉 채울지.
   final bool expand;
 
-  /// 모서리 반경. 기본 [AppRadius.lg].
+  /// 모서리 반경. 기본 [AppRadius.md] (10).
   final double borderRadius;
 
   const AppButton({
@@ -37,7 +37,7 @@ class AppButton extends StatelessWidget {
     this.leadingIcon,
     this.trailingIcon,
     this.expand = false,
-    this.borderRadius = AppRadius.lg,
+    this.borderRadius = AppRadius.md,
   });
 
   @override
