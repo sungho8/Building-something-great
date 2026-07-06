@@ -19,6 +19,7 @@ _DDayItem _$DDayItemFromJson(Map<String, dynamic> json) => _DDayItem(
           ?.map((e) => $enumDecode(_$DdayReminderEnumMap, e))
           .toList() ??
       const [DdayReminder.onDay],
+  colorValue: (json['colorValue'] as num?)?.toInt(),
   createdAt: json['createdAt'] == null
       ? null
       : DateTime.parse(json['createdAt'] as String),
@@ -35,6 +36,7 @@ Map<String, dynamic> _$DDayItemToJson(_DDayItem instance) => <String, dynamic>{
   'reminders': instance.reminders
       .map((e) => _$DdayReminderEnumMap[e]!)
       .toList(),
+  'colorValue': instance.colorValue,
   'createdAt': instance.createdAt?.toIso8601String(),
 };
 

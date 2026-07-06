@@ -14,6 +14,8 @@ class DDayCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // 항목별 KeyColor가 있으면 라벨·핀 강조에 사용 (없으면 브랜드색).
+    final accent = item.color ?? theme.colorScheme.primary;
 
     return AppCard(
       padding: EdgeInsets.zero,
@@ -35,8 +37,7 @@ class DDayCard extends StatelessWidget {
                     Row(
                       children: [
                         if (item.pinned) ...[
-                          Icon(Icons.push_pin,
-                              size: 13, color: theme.colorScheme.primary),
+                          Icon(Icons.push_pin, size: 13, color: accent),
                           const SizedBox(width: 4),
                         ],
                         Flexible(
@@ -65,9 +66,7 @@ class DDayCard extends StatelessWidget {
 
               Text(
                 item.label,
-                style: AppTypography.title3.copyWith(
-                  color: theme.colorScheme.primary,
-                ),
+                style: AppTypography.title3.copyWith(color: accent),
               ),
             ],
           ),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' show DateUtils;
+import 'package:flutter/material.dart' show Color, DateUtils;
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'dday_item.freezed.dart';
@@ -40,6 +40,9 @@ abstract class DDayItem with _$DDayItem {
 
     /// 알림 시점 목록. 비어 있으면 알림 없음.
     @Default([DdayReminder.onDay]) List<DdayReminder> reminders,
+
+    /// KeyColor(ARGB). null이면 앱 브랜드색을 따른다. 히어로 카드 채움·라벨 강조에 쓰임.
+    int? colorValue,
 
     /// 생성 시각. 진행 게이지 계산용 (구버전 데이터는 null).
     DateTime? createdAt,
@@ -104,6 +107,9 @@ abstract class DDayItem with _$DDayItem {
     if (total <= 0) return null;
     return ((total - d) / total).clamp(0.0, 1.0);
   }
+
+  /// KeyColor. null이면 앱 브랜드색 사용.
+  Color? get color => colorValue == null ? null : Color(colorValue!);
 
   /// 알림 슬롯별 32비트 정수 id (슬롯 = [DdayReminder.index])
   int notificationIdFor(DdayReminder reminder) =>

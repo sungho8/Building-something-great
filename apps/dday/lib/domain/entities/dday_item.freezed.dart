@@ -20,7 +20,8 @@ mixin _$DDayItem {
  String get emoji;/// 목록 맨 위·홈 위젯 고정.
  bool get pinned;/// 지난 날짜를 셀 때 당일을 1일로 포함 (만난 날 = 1일).
  bool get includeStartDay;/// 알림 시점 목록. 비어 있으면 알림 없음.
- List<DdayReminder> get reminders;/// 생성 시각. 진행 게이지 계산용 (구버전 데이터는 null).
+ List<DdayReminder> get reminders;/// KeyColor(ARGB). null이면 앱 브랜드색을 따른다. 히어로 카드 채움·라벨 강조에 쓰임.
+ int? get colorValue;/// 생성 시각. 진행 게이지 계산용 (구버전 데이터는 null).
  DateTime? get createdAt;
 /// Create a copy of DDayItem
 /// with the given fields replaced by the non-null parameter values.
@@ -34,16 +35,16 @@ $DDayItemCopyWith<DDayItem> get copyWith => _$DDayItemCopyWithImpl<DDayItem>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DDayItem&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.date, date) || other.date == date)&&(identical(other.repeatYearly, repeatYearly) || other.repeatYearly == repeatYearly)&&(identical(other.emoji, emoji) || other.emoji == emoji)&&(identical(other.pinned, pinned) || other.pinned == pinned)&&(identical(other.includeStartDay, includeStartDay) || other.includeStartDay == includeStartDay)&&const DeepCollectionEquality().equals(other.reminders, reminders)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DDayItem&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.date, date) || other.date == date)&&(identical(other.repeatYearly, repeatYearly) || other.repeatYearly == repeatYearly)&&(identical(other.emoji, emoji) || other.emoji == emoji)&&(identical(other.pinned, pinned) || other.pinned == pinned)&&(identical(other.includeStartDay, includeStartDay) || other.includeStartDay == includeStartDay)&&const DeepCollectionEquality().equals(other.reminders, reminders)&&(identical(other.colorValue, colorValue) || other.colorValue == colorValue)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,date,repeatYearly,emoji,pinned,includeStartDay,const DeepCollectionEquality().hash(reminders),createdAt);
+int get hashCode => Object.hash(runtimeType,id,title,date,repeatYearly,emoji,pinned,includeStartDay,const DeepCollectionEquality().hash(reminders),colorValue,createdAt);
 
 @override
 String toString() {
-  return 'DDayItem(id: $id, title: $title, date: $date, repeatYearly: $repeatYearly, emoji: $emoji, pinned: $pinned, includeStartDay: $includeStartDay, reminders: $reminders, createdAt: $createdAt)';
+  return 'DDayItem(id: $id, title: $title, date: $date, repeatYearly: $repeatYearly, emoji: $emoji, pinned: $pinned, includeStartDay: $includeStartDay, reminders: $reminders, colorValue: $colorValue, createdAt: $createdAt)';
 }
 
 
@@ -54,7 +55,7 @@ abstract mixin class $DDayItemCopyWith<$Res>  {
   factory $DDayItemCopyWith(DDayItem value, $Res Function(DDayItem) _then) = _$DDayItemCopyWithImpl;
 @useResult
 $Res call({
- String id, String title, DateTime date, bool repeatYearly, String emoji, bool pinned, bool includeStartDay, List<DdayReminder> reminders, DateTime? createdAt
+ String id, String title, DateTime date, bool repeatYearly, String emoji, bool pinned, bool includeStartDay, List<DdayReminder> reminders, int? colorValue, DateTime? createdAt
 });
 
 
@@ -71,7 +72,7 @@ class _$DDayItemCopyWithImpl<$Res>
 
 /// Create a copy of DDayItem
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? date = null,Object? repeatYearly = null,Object? emoji = null,Object? pinned = null,Object? includeStartDay = null,Object? reminders = null,Object? createdAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? date = null,Object? repeatYearly = null,Object? emoji = null,Object? pinned = null,Object? includeStartDay = null,Object? reminders = null,Object? colorValue = freezed,Object? createdAt = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
@@ -81,7 +82,8 @@ as bool,emoji: null == emoji ? _self.emoji : emoji // ignore: cast_nullable_to_n
 as String,pinned: null == pinned ? _self.pinned : pinned // ignore: cast_nullable_to_non_nullable
 as bool,includeStartDay: null == includeStartDay ? _self.includeStartDay : includeStartDay // ignore: cast_nullable_to_non_nullable
 as bool,reminders: null == reminders ? _self.reminders : reminders // ignore: cast_nullable_to_non_nullable
-as List<DdayReminder>,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as List<DdayReminder>,colorValue: freezed == colorValue ? _self.colorValue : colorValue // ignore: cast_nullable_to_non_nullable
+as int?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }
@@ -167,10 +169,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  DateTime date,  bool repeatYearly,  String emoji,  bool pinned,  bool includeStartDay,  List<DdayReminder> reminders,  DateTime? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  DateTime date,  bool repeatYearly,  String emoji,  bool pinned,  bool includeStartDay,  List<DdayReminder> reminders,  int? colorValue,  DateTime? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DDayItem() when $default != null:
-return $default(_that.id,_that.title,_that.date,_that.repeatYearly,_that.emoji,_that.pinned,_that.includeStartDay,_that.reminders,_that.createdAt);case _:
+return $default(_that.id,_that.title,_that.date,_that.repeatYearly,_that.emoji,_that.pinned,_that.includeStartDay,_that.reminders,_that.colorValue,_that.createdAt);case _:
   return orElse();
 
 }
@@ -188,10 +190,10 @@ return $default(_that.id,_that.title,_that.date,_that.repeatYearly,_that.emoji,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  DateTime date,  bool repeatYearly,  String emoji,  bool pinned,  bool includeStartDay,  List<DdayReminder> reminders,  DateTime? createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  DateTime date,  bool repeatYearly,  String emoji,  bool pinned,  bool includeStartDay,  List<DdayReminder> reminders,  int? colorValue,  DateTime? createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _DDayItem():
-return $default(_that.id,_that.title,_that.date,_that.repeatYearly,_that.emoji,_that.pinned,_that.includeStartDay,_that.reminders,_that.createdAt);case _:
+return $default(_that.id,_that.title,_that.date,_that.repeatYearly,_that.emoji,_that.pinned,_that.includeStartDay,_that.reminders,_that.colorValue,_that.createdAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -208,10 +210,10 @@ return $default(_that.id,_that.title,_that.date,_that.repeatYearly,_that.emoji,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  DateTime date,  bool repeatYearly,  String emoji,  bool pinned,  bool includeStartDay,  List<DdayReminder> reminders,  DateTime? createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  DateTime date,  bool repeatYearly,  String emoji,  bool pinned,  bool includeStartDay,  List<DdayReminder> reminders,  int? colorValue,  DateTime? createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _DDayItem() when $default != null:
-return $default(_that.id,_that.title,_that.date,_that.repeatYearly,_that.emoji,_that.pinned,_that.includeStartDay,_that.reminders,_that.createdAt);case _:
+return $default(_that.id,_that.title,_that.date,_that.repeatYearly,_that.emoji,_that.pinned,_that.includeStartDay,_that.reminders,_that.colorValue,_that.createdAt);case _:
   return null;
 
 }
@@ -223,7 +225,7 @@ return $default(_that.id,_that.title,_that.date,_that.repeatYearly,_that.emoji,_
 @JsonSerializable()
 
 class _DDayItem extends DDayItem {
-  const _DDayItem({required this.id, required this.title, required this.date, this.repeatYearly = false, this.emoji = '', this.pinned = false, this.includeStartDay = false, final  List<DdayReminder> reminders = const [DdayReminder.onDay], this.createdAt}): _reminders = reminders,super._();
+  const _DDayItem({required this.id, required this.title, required this.date, this.repeatYearly = false, this.emoji = '', this.pinned = false, this.includeStartDay = false, final  List<DdayReminder> reminders = const [DdayReminder.onDay], this.colorValue, this.createdAt}): _reminders = reminders,super._();
   factory _DDayItem.fromJson(Map<String, dynamic> json) => _$DDayItemFromJson(json);
 
 @override final  String id;
@@ -246,6 +248,8 @@ class _DDayItem extends DDayItem {
   return EqualUnmodifiableListView(_reminders);
 }
 
+/// KeyColor(ARGB). null이면 앱 브랜드색을 따른다. 히어로 카드 채움·라벨 강조에 쓰임.
+@override final  int? colorValue;
 /// 생성 시각. 진행 게이지 계산용 (구버전 데이터는 null).
 @override final  DateTime? createdAt;
 
@@ -262,16 +266,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DDayItem&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.date, date) || other.date == date)&&(identical(other.repeatYearly, repeatYearly) || other.repeatYearly == repeatYearly)&&(identical(other.emoji, emoji) || other.emoji == emoji)&&(identical(other.pinned, pinned) || other.pinned == pinned)&&(identical(other.includeStartDay, includeStartDay) || other.includeStartDay == includeStartDay)&&const DeepCollectionEquality().equals(other._reminders, _reminders)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DDayItem&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.date, date) || other.date == date)&&(identical(other.repeatYearly, repeatYearly) || other.repeatYearly == repeatYearly)&&(identical(other.emoji, emoji) || other.emoji == emoji)&&(identical(other.pinned, pinned) || other.pinned == pinned)&&(identical(other.includeStartDay, includeStartDay) || other.includeStartDay == includeStartDay)&&const DeepCollectionEquality().equals(other._reminders, _reminders)&&(identical(other.colorValue, colorValue) || other.colorValue == colorValue)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,date,repeatYearly,emoji,pinned,includeStartDay,const DeepCollectionEquality().hash(_reminders),createdAt);
+int get hashCode => Object.hash(runtimeType,id,title,date,repeatYearly,emoji,pinned,includeStartDay,const DeepCollectionEquality().hash(_reminders),colorValue,createdAt);
 
 @override
 String toString() {
-  return 'DDayItem(id: $id, title: $title, date: $date, repeatYearly: $repeatYearly, emoji: $emoji, pinned: $pinned, includeStartDay: $includeStartDay, reminders: $reminders, createdAt: $createdAt)';
+  return 'DDayItem(id: $id, title: $title, date: $date, repeatYearly: $repeatYearly, emoji: $emoji, pinned: $pinned, includeStartDay: $includeStartDay, reminders: $reminders, colorValue: $colorValue, createdAt: $createdAt)';
 }
 
 
@@ -282,7 +286,7 @@ abstract mixin class _$DDayItemCopyWith<$Res> implements $DDayItemCopyWith<$Res>
   factory _$DDayItemCopyWith(_DDayItem value, $Res Function(_DDayItem) _then) = __$DDayItemCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title, DateTime date, bool repeatYearly, String emoji, bool pinned, bool includeStartDay, List<DdayReminder> reminders, DateTime? createdAt
+ String id, String title, DateTime date, bool repeatYearly, String emoji, bool pinned, bool includeStartDay, List<DdayReminder> reminders, int? colorValue, DateTime? createdAt
 });
 
 
@@ -299,7 +303,7 @@ class __$DDayItemCopyWithImpl<$Res>
 
 /// Create a copy of DDayItem
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? date = null,Object? repeatYearly = null,Object? emoji = null,Object? pinned = null,Object? includeStartDay = null,Object? reminders = null,Object? createdAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? date = null,Object? repeatYearly = null,Object? emoji = null,Object? pinned = null,Object? includeStartDay = null,Object? reminders = null,Object? colorValue = freezed,Object? createdAt = freezed,}) {
   return _then(_DDayItem(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
@@ -309,7 +313,8 @@ as bool,emoji: null == emoji ? _self.emoji : emoji // ignore: cast_nullable_to_n
 as String,pinned: null == pinned ? _self.pinned : pinned // ignore: cast_nullable_to_non_nullable
 as bool,includeStartDay: null == includeStartDay ? _self.includeStartDay : includeStartDay // ignore: cast_nullable_to_non_nullable
 as bool,reminders: null == reminders ? _self._reminders : reminders // ignore: cast_nullable_to_non_nullable
-as List<DdayReminder>,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as List<DdayReminder>,colorValue: freezed == colorValue ? _self.colorValue : colorValue // ignore: cast_nullable_to_non_nullable
+as int?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }

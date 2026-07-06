@@ -1,3 +1,5 @@
+import 'dart:ui' show Color;
+
 import 'package:dday/domain/entities/dday_item.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -57,17 +59,23 @@ void main() {
     expect(item.progress, isNull);
   });
 
+  test('colorValue가 null이면 color도 null (브랜드 위임)', () {
+    expect(_item(DateTime.now()).color, isNull);
+  });
+
   test('JSON 직렬화 왕복 (확장 필드 포함)', () {
     final item = DDayItem(
       id: 'abc',
       title: '시험',
       date: DateTime(2026, 11, 19),
       emoji: '📚',
+      colorValue: 0xFF3182F6,
       repeatYearly: true,
       pinned: true,
       reminders: const [DdayReminder.dayBefore, DdayReminder.weekBefore],
     );
     final restored = DDayItem.fromJson(item.toJson());
     expect(restored, item);
+    expect(restored.color, const Color(0xFF3182F6));
   });
 }

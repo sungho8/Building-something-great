@@ -12,6 +12,18 @@ const _emojiPresets = [
   '🎂', '💍', '✈️', '🎓', '🎉', '❤️', '📚', '🏃', '💼', '🐣', //
 ];
 
+/// 색상 프리셋 (ARGB). 첫 스와치는 '기본(브랜드색)' = null이라 여기엔 없음.
+const _colorPresets = <int>[
+  0xFF3182F6, // blue
+  0xFF02BC70, // green
+  0xFFF98C0E, // orange
+  0xFF7E5BEF, // purple
+  0xFFF04452, // red
+  0xFF06B4C9, // teal
+  0xFFEF5DA8, // pink
+  0xFF8B95A1, // grey
+];
+
 /// 알림 시점 라벨
 const _reminderLabels = {
   DdayReminder.onDay: '당일',
@@ -35,6 +47,7 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
 
   late DateTime _date;
   late String _emoji;
+  late int? _colorValue;
   late bool _repeatYearly;
   late bool _includeStartDay;
   late bool _pinned;
@@ -49,6 +62,7 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
     _titleController = TextEditingController(text: item?.title ?? '');
     _date = item?.date ?? DateTime.now();
     _emoji = item?.emoji ?? '';
+    _colorValue = item?.colorValue;
     _repeatYearly = item?.repeatYearly ?? false;
     _includeStartDay = item?.includeStartDay ?? false;
     _pinned = item?.pinned ?? false;
@@ -94,6 +108,7 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
       title: title,
       date: _date,
       emoji: _emoji,
+      colorValue: _colorValue,
       repeatYearly: _repeatYearly,
       includeStartDay: _includeStartDay,
       pinned: _pinned,
@@ -155,6 +170,13 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
           _EmojiPicker(
             selected: _emoji,
             onSelected: (e) => setState(() => _emoji = e),
+          ),
+
+          const SizedBox(height: AppSpacing.s16),
+
+          _ColorPicker(
+            selected: _colorValue,
+            onSelected: (c) => setState(() => _colorValue = c),
           ),
 
           const SizedBox(height: AppSpacing.s20),
@@ -299,6 +321,69 @@ class _EmojiChip extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(AppRadius.md),
           child: SizedBox(width: 44, child: Center(child: label)),
+        ),
+      ),
+    );
+  }
+}
+
+/// 색상 선택 가로 목록. 첫 스와치는 '기본(브랜드색)' = null.
+class _ColorPicker extends StatelessWidget {
+  const _ColorPicker({required this.selected, required this.onSelected});
+
+  final int? selected;
+  final ValueChanged<int?> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final brand = Theme.of(context).colorScheme.primary;
+
+    return SizedBox(
+      height: 36,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          _Swatch(
+            color: brand,
+            selected: selected == null,
+            onTap: () => onSelected(null),
+          ),
+          for (final value in _colorPresets)
+            _Swatch(
+              color: Color(value),
+              selected: selected == value,
+              onTap: () => onSelected(value),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Swatch extends StatelessWidget {
+  const _Swatch({
+    required this.color,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final Color color;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: AppSpacing.s8),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          child: selected
+              ? const Icon(Icons.check, color: AppCommon.white, size: 20)
+              : null,
         ),
       ),
     );

@@ -23,17 +23,19 @@ class DDayHeroCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final onColor = scheme.onPrimary;
+    // 항목별 KeyColor가 있으면 그 색으로 채운다 (없으면 브랜드색).
+    final accent = item.color ?? scheme.primary;
+    const onColor = AppCommon.white;
     final subColor = onColor.withValues(alpha: 0.85);
     final isToday = item.daysFromToday == 0;
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: scheme.primary,
+        color: accent,
         borderRadius: BorderRadius.circular(AppRadius.xl),
         boxShadow: [
           BoxShadow(
-            color: scheme.primary.withValues(alpha: 0.30),
+            color: accent.withValues(alpha: 0.30),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
