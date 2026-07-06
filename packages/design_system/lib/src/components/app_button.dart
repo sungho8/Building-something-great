@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../tokens/colors.dart';
 import '../tokens/radius.dart';
 import '../tokens/spacing.dart';
 import '../tokens/typography.dart';
@@ -28,6 +29,10 @@ class AppButton extends StatelessWidget {
   /// 모서리 반경. 기본 [AppRadius.md] (10).
   final double borderRadius;
 
+  /// 강조 색 커스텀. null이면 테마 primary.
+  /// primary 변형은 채움색, secondary/tertiary는 글자·테두리색으로 쓰인다.
+  final Color? color;
+
   const AppButton({
     super.key,
     required this.label,
@@ -38,13 +43,14 @@ class AppButton extends StatelessWidget {
     this.trailingIcon,
     this.expand = false,
     this.borderRadius = AppRadius.md,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     final spec = _specOf(size);
     final theme = Theme.of(context);
-    final primary = theme.colorScheme.primary;
+    final primary = color ?? theme.colorScheme.primary;
     final shape = RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(borderRadius),
     );
@@ -63,6 +69,8 @@ class AppButton extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: spec.hPad),
             textStyle: textStyle,
             shape: shape,
+            backgroundColor: color,
+            foregroundColor: color != null ? AppCommon.white : null,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
           child: child,
@@ -75,6 +83,7 @@ class AppButton extends StatelessWidget {
             textStyle: textStyle,
             shape: shape,
             side: BorderSide(color: primary),
+            foregroundColor: primary,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
           child: child,
@@ -86,6 +95,7 @@ class AppButton extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: spec.hPad),
             textStyle: textStyle,
             shape: shape,
+            foregroundColor: primary,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
           child: child,

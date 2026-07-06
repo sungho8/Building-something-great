@@ -8,7 +8,6 @@ import '../../../domain/entities/dday_item.dart';
 import '../../widgets/dday_card.dart';
 import '../../widgets/dday_hero_card.dart';
 import 'dday_edit_view.dart';
-import 'widgets/dday_empty_view.dart';
 
 /// D-Day 목록 화면. 최상단은 히어로 카드, 나머지는 컴팩트 카드.
 class DDayListView extends ConsumerWidget {
@@ -26,7 +25,11 @@ class DDayListView extends ConsumerWidget {
         label: const Text('추가'),
       ),
       body: items.isEmpty
-          ? const DDayEmptyView()
+          ? const AppEmptyState(
+              icon: Icons.event_outlined,
+              title: '등록된 D-Day가 없어요',
+              description: '오른쪽 아래 버튼으로 추가해보세요',
+            )
           : ListView.builder(
               padding: const EdgeInsets.fromLTRB(
                 AppSpacing.s16,
@@ -82,19 +85,12 @@ class DDayListView extends ConsumerWidget {
   void _delete(BuildContext context, WidgetRef ref, DDayItem item) {
     HapticFeedback.mediumImpact();
     ref.read(ddayListProvider.notifier).remove(item.id);
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text('«${item.title}» 삭제됨'),
-          behavior: SnackBarBehavior.floating,
-          action: SnackBarAction(
-            label: '실행취소',
-            onPressed: () =>
-                ref.read(ddayListProvider.notifier).restore(item),
-          ),
-        ),
-      );
+    showAppSnackBar(
+      context,
+      '«${item.title}» 삭제됨',
+      actionLabel: '실행취소',
+      onAction: () => ref.read(ddayListProvider.notifier).restore(item),
+    );
   }
 }
 

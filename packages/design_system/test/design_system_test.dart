@@ -44,4 +44,78 @@ void main() {
 
     expect(find.text('확인'), findsOneWidget);
   });
+
+  testWidgets('AppChip 탭 시 콜백이 호출된다', (tester) async {
+    var tapped = false;
+    await tester.pumpWidget(
+      AppFactory(
+        brand: const BrandConfig(seed: Color(0xFF2E6BFF)),
+        home: Scaffold(
+          body: AppChip(label: '당일', onTap: () => tapped = true),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('당일'));
+    expect(tapped, isTrue);
+  });
+
+  testWidgets('AppListTile은 제목·부제·chevron을 렌더한다', (tester) async {
+    await tester.pumpWidget(
+      AppFactory(
+        brand: const BrandConfig(seed: Color(0xFF2E6BFF)),
+        home: Scaffold(
+          body: AppListTile(
+            leadingIcon: Icons.settings,
+            title: '설정',
+            subtitle: '알림·테마',
+            onTap: () {},
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('설정'), findsOneWidget);
+    expect(find.text('알림·테마'), findsOneWidget);
+    expect(find.byIcon(Icons.chevron_right), findsOneWidget);
+  });
+
+  testWidgets('AppEmptyState는 제목·설명·액션을 렌더한다', (tester) async {
+    await tester.pumpWidget(
+      const AppFactory(
+        brand: BrandConfig(seed: Color(0xFF2E6BFF)),
+        home: Scaffold(
+          body: AppEmptyState(
+            icon: Icons.inbox_outlined,
+            title: '비어 있어요',
+            description: '항목을 추가해보세요',
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('비어 있어요'), findsOneWidget);
+    expect(find.text('항목을 추가해보세요'), findsOneWidget);
+  });
+
+  testWidgets('AppBadge 변형 3종이 렌더된다', (tester) async {
+    await tester.pumpWidget(
+      const AppFactory(
+        brand: BrandConfig(seed: Color(0xFF2E6BFF)),
+        home: Scaffold(
+          body: Row(
+            children: [
+              AppBadge(text: 'A'),
+              AppBadge(text: 'B', variant: AppBadgeVariant.fill),
+              AppBadge(text: 'C', variant: AppBadgeVariant.outline),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('A'), findsOneWidget);
+    expect(find.text('B'), findsOneWidget);
+    expect(find.text('C'), findsOneWidget);
+  });
 }

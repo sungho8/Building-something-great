@@ -100,7 +100,10 @@ class DDayHeroCard extends StatelessWidget {
                     ),
                     if (item.anniversaryYears != null) ...[
                       const SizedBox(width: AppSpacing.s8),
-                      _Badge(text: '${item.anniversaryYears}주년', on: onColor),
+                      AppBadge(
+                        text: '${item.anniversaryYears}주년',
+                        color: onColor,
+                      ),
                     ],
                   ],
                 ),
@@ -135,31 +138,3 @@ class DDayHeroCard extends StatelessWidget {
   }
 }
 
-/// N주년 등 작은 배지 (채운 카드 위에 얹는 반투명 흰 필).
-class _Badge extends StatelessWidget {
-  const _Badge({required this.text, required this.on});
-
-  final String text;
-  final Color on;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.s8,
-        vertical: 2,
-      ),
-      decoration: BoxDecoration(
-        color: on.withValues(alpha: 0.18),
-        borderRadius: BorderRadius.circular(AppRadius.sm),
-      ),
-      child: Text(
-        text,
-        style: AppTypography.caption1.copyWith(
-          color: on,
-          fontWeight: AppFontWeight.semiBold,
-        ),
-      ),
-    );
-  }
-}

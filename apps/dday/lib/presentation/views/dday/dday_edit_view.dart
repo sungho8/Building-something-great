@@ -77,9 +77,8 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
   Future<void> _save() async {
     final title = _titleController.text.trim();
     if (title.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('제목을 입력해주세요')),
-      );
+      showAppSnackBar(context, '제목을 입력해주세요',
+          variant: AppSnackBarVariant.error);
       return;
     }
 
@@ -109,22 +108,13 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
 
   // 삭제 (확인 후)
   Future<void> _delete() async {
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('삭제할까요?'),
-        content: Text('«${widget.item!.title}»을(를) 삭제합니다.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('취소'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('삭제'),
-          ),
-        ],
-      ),
+    final ok = await showAppDialog(
+      context,
+      title: '삭제할까요?',
+      message: '«${widget.item!.title}»을(를) 삭제합니다.',
+      confirmLabel: '삭제',
+      cancelLabel: '취소',
+      destructive: true,
     );
     if (ok != true || !mounted) return;
     await ref.read(ddayListProvider.notifier).remove(widget.item!.id);
@@ -153,14 +143,11 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
           AppSpacing.s32,
         ),
         children: [
-          TextField(
+          AppTextField(
             controller: _titleController,
+            label: '제목',
+            hint: '예: 수능, 결혼기념일',
             textInputAction: TextInputAction.done,
-            style: AppTypography.body1,
-            decoration: const InputDecoration(
-              labelText: '제목',
-              hintText: '예: 수능, 결혼기념일',
-            ),
           ),
 
           const SizedBox(height: AppSpacing.s20),
@@ -173,12 +160,11 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
           const SizedBox(height: AppSpacing.s20),
 
           AppCard(
-            child: ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.calendar_today_outlined),
-              title: const Text('날짜'),
-              subtitle: Text(formatDdayDate(_date)),
-              trailing: const Icon(Icons.chevron_right),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s16),
+            child: AppListTile(
+              leadingIcon: Icons.calendar_today_outlined,
+              title: '날짜',
+              subtitle: formatDdayDate(_date),
               onTap: _pickDate,
             ),
           ),
@@ -214,26 +200,20 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
 
           const SizedBox(height: AppSpacing.s20),
 
-          Text(
-            '알림',
-            style: AppTypography.sectionTitle
-                .copyWith(color: AppSemantic.textSecondary),
-          ),
-
-          const SizedBox(height: AppSpacing.s8),
+          const AppSectionTitle(text: '알림'),
 
           Wrap(
             spacing: AppSpacing.s8,
             children: [
               for (final r in DdayReminder.values)
-                FilterChip(
-                  label: Text(_reminderLabels[r]!),
+                AppChip(
+                  label: _reminderLabels[r]!,
                   selected: _reminders.contains(r),
-                  onSelected: (on) => setState(() {
-                    if (on) {
-                      _reminders.add(r);
-                    } else {
+                  onTap: () => setState(() {
+                    if (_reminders.contains(r)) {
                       _reminders.remove(r);
+                    } else {
+                      _reminders.add(r);
                     }
                   }),
                 ),

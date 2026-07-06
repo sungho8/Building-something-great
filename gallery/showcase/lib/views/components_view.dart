@@ -114,10 +114,229 @@ class ComponentsView extends StatelessWidget {
 
         const SizedBox(height: AppSpacing.s32),
 
+        const Text('AppTextField', style: AppTypography.heading1),
+
+        const SizedBox(height: AppSpacing.s12),
+
+        const AppTextField(
+          label: '제목',
+          hint: '예: 수능, 결혼기념일',
+          prefixIcon: Icons.edit_outlined,
+        ),
+
+        const SizedBox(height: AppSpacing.s12),
+
+        const AppTextField(
+          label: '이메일',
+          hint: 'you@example.com',
+          errorText: '이메일 형식이 아니에요',
+        ),
+
+        const SizedBox(height: AppSpacing.s32),
+
+        const Text('AppChip', style: AppTypography.heading1),
+
+        const SizedBox(height: AppSpacing.s12),
+
+        const _ChipDemo(),
+
+        const SizedBox(height: AppSpacing.s32),
+
+        const Text('AppListTile', style: AppTypography.heading1),
+
+        const SizedBox(height: AppSpacing.s12),
+
+        AppCard(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s16),
+          child: Column(
+            children: [
+              AppListTile(
+                leadingIcon: Icons.notifications_outlined,
+                leadingColor: Theme.of(context).colorScheme.primary,
+                title: '알림 설정',
+                subtitle: '당일 오전 9시',
+                onTap: () {},
+              ),
+
+              const Divider(height: 1),
+
+              AppListTile(
+                leadingIcon: Icons.palette_outlined,
+                title: '테마',
+                trailing: const AppBadge(text: 'NEW'),
+                onTap: () {},
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.s32),
+
+        const Text('AppBadge', style: AppTypography.heading1),
+
+        const SizedBox(height: AppSpacing.s12),
+
+        const Wrap(
+          spacing: AppSpacing.s8,
+          runSpacing: AppSpacing.s8,
+          children: [
+            AppBadge(text: 'tint'),
+            AppBadge(text: 'fill', variant: AppBadgeVariant.fill),
+            AppBadge(text: 'outline', variant: AppBadgeVariant.outline),
+            AppBadge(text: '성공', color: AppGreen.s500),
+            AppBadge(text: '경고', color: AppOrange.s600),
+            AppBadge(text: '오류', color: AppRed.s500),
+          ],
+        ),
+
+        const SizedBox(height: AppSpacing.s32),
+
+        const Text('AppSectionTitle', style: AppTypography.heading1),
+
+        const SizedBox(height: AppSpacing.s12),
+
+        AppSectionTitle(
+          text: '최근 항목',
+          trailing: AppButton(
+            label: '전체보기',
+            size: AppButtonSize.xs,
+            variant: AppButtonVariant.tertiary,
+            onPressed: () {},
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.s24),
+
+        const Text('AppEmptyState', style: AppTypography.heading1),
+
+        const SizedBox(height: AppSpacing.s12),
+
+        Container(
+          height: 240,
+          decoration: BoxDecoration(
+            border: Border.all(color: AppSemantic.border),
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+          ),
+          child: AppEmptyState(
+            icon: Icons.inbox_outlined,
+            title: '아직 비어 있어요',
+            description: '첫 항목을 추가해보세요',
+            action: AppButton(
+              label: '추가하기',
+              size: AppButtonSize.sm,
+              onPressed: () {},
+            ),
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.s32),
+
+        const Text('Dialog · BottomSheet · SnackBar',
+            style: AppTypography.heading1),
+
+        const SizedBox(height: AppSpacing.s12),
+
+        Wrap(
+          spacing: AppSpacing.s8,
+          runSpacing: AppSpacing.s8,
+          children: [
+            AppButton(
+              label: 'Dialog',
+              size: AppButtonSize.sm,
+              variant: AppButtonVariant.secondary,
+              onPressed: () => showAppDialog(
+                context,
+                title: '삭제할까요?',
+                message: '이 동작은 되돌릴 수 없어요.',
+                confirmLabel: '삭제',
+                cancelLabel: '취소',
+                destructive: true,
+              ),
+            ),
+            AppButton(
+              label: 'BottomSheet',
+              size: AppButtonSize.sm,
+              variant: AppButtonVariant.secondary,
+              onPressed: () => showAppBottomSheet(
+                context,
+                title: '옵션 선택',
+                child: Column(
+                  children: [
+                    AppListTile(
+                      leadingIcon: Icons.share_outlined,
+                      title: '공유',
+                      onTap: () => Navigator.pop(context),
+                    ),
+                    AppListTile(
+                      leadingIcon: Icons.delete_outline,
+                      leadingColor: AppRed.s500,
+                      title: '삭제',
+                      onTap: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            AppButton(
+              label: 'SnackBar',
+              size: AppButtonSize.sm,
+              variant: AppButtonVariant.secondary,
+              onPressed: () => showAppSnackBar(
+                context,
+                '저장했어요',
+                variant: AppSnackBarVariant.success,
+                actionLabel: '실행취소',
+                onAction: () {},
+              ),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: AppSpacing.s32),
+
         Text(
           '새 공용 컴포넌트를 만들면 이 화면에 섹션을 추가한다.',
           style: AppTypography.caption1
               .copyWith(color: AppSemantic.textTertiary),
+        ),
+      ],
+    );
+  }
+}
+
+/// AppChip 다중 선택 데모.
+class _ChipDemo extends StatefulWidget {
+  const _ChipDemo();
+
+  @override
+  State<_ChipDemo> createState() => _ChipDemoState();
+}
+
+class _ChipDemoState extends State<_ChipDemo> {
+  // 선택된 라벨 집합
+  final _selected = <String>{'당일'};
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: AppSpacing.s8,
+      runSpacing: AppSpacing.s8,
+      children: [
+        for (final label in ['당일', '1일 전', '7일 전'])
+          AppChip(
+            label: label,
+            selected: _selected.contains(label),
+            onTap: () => setState(() {
+              _selected.contains(label)
+                  ? _selected.remove(label)
+                  : _selected.add(label);
+            }),
+          ),
+        AppChip(
+          label: '아이콘',
+          leadingIcon: Icons.star_outline,
+          size: AppChipSize.sm,
+          onTap: () {},
         ),
       ],
     );
