@@ -9,6 +9,7 @@ class AppScaffold extends StatelessWidget {
   final Widget body;
   final Widget? floatingActionButton;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
+  final Widget? bottomNavigationBar;
   final Color? backgroundColor;
   final bool resizeToAvoidBottomInset;
 
@@ -18,6 +19,7 @@ class AppScaffold extends StatelessWidget {
     required this.body,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
+    this.bottomNavigationBar,
     this.backgroundColor,
     this.resizeToAvoidBottomInset = true,
   });
@@ -29,10 +31,13 @@ class AppScaffold extends StatelessWidget {
       backgroundColor: backgroundColor,
       floatingActionButton: floatingActionButton,
       floatingActionButtonLocation: floatingActionButtonLocation,
+      bottomNavigationBar: bottomNavigationBar,
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       body: SafeArea(
         // appBar가 있으면 상단 inset은 appBar가 처리하므로 top은 제외.
         top: appBar == null,
+        // 하단 내비게이션이 있으면 하단 inset은 그쪽이 처리.
+        bottom: bottomNavigationBar == null,
         child: body,
       ),
     );

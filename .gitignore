@@ -19,3 +19,6 @@ pubspec.lock
 
 # Local env / secrets
 *.env
+
+# FVM Version Cache
+.fvm/

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../tokens/colors.dart';
+import '../tokens/typography.dart';
 import 'brand_config.dart';
 
 /// [BrandConfig] → [ThemeData].
 ///
-/// 디자인 시스템의 단일 관문.
-/// - Primary는 브랜드 seed **원색 그대로** (M3 fromSeed의 톤 다운을 피해 선명하게).
-/// - 배경은 브랜드 무드색(없으면 중립 회색).
-/// - 중립·텍스트·테두리·에러는 EggSchool 공유 토큰.
+/// 디자인 시스템의 단일 관문. TDS 무드:
+/// - 배경은 흰색(또는 브랜드 무드색), 위계는 회색([AppGrey])으로.
+/// - Primary는 브랜드 seed **원색 그대로** (M3 fromSeed의 톤 다운 회피).
+/// - 텍스트는 [AppTypography] 스케일.
 ThemeData buildTheme(BrandConfig brand, Brightness brightness) {
   final isLight = brightness == Brightness.light;
   final base = ColorScheme.fromSeed(
@@ -22,36 +23,60 @@ ThemeData buildTheme(BrandConfig brand, Brightness brightness) {
     onPrimary: AppCommon.white,
   );
 
-  // 라이트 모드는 공유 토큰으로 중립색 역할을 고정.
+  // 라이트 모드는 회색 위계로 중립 역할을 고정.
   final scheme = isLight
       ? brandScheme.copyWith(
           surface: AppCommon.white,
-          onSurface: AppText.s900,
-          onSurfaceVariant: AppText.s500,
-          outline: AppBorder.s300,
-          outlineVariant: AppBorder.s200,
+          onSurface: AppSemantic.textPrimary,
+          onSurfaceVariant: AppSemantic.textTertiary,
+          outline: AppGrey.s300,
+          outlineVariant: AppSemantic.border,
           error: AppRed.s500,
           surfaceContainerLowest: AppCommon.white,
-          surfaceContainerLow: AppNeutral.s50,
-          surfaceContainer: AppNeutral.s100,
+          surfaceContainerLow: AppGrey.s50,
+          surfaceContainer: AppSemantic.bgSecondary,
         )
       : brandScheme;
 
   final background =
-      brand.background ?? (isLight ? AppNeutral.s50 : scheme.surface);
+      brand.background ?? (isLight ? AppSemantic.bgScreen : scheme.surface);
   final cardRadius = BorderRadius.circular(brand.radius);
+
+  // TDS 스케일을 Material textTheme 슬롯에 매핑.
+  const textTheme = TextTheme(
+    displaySmall: AppTypography.display,
+    headlineLarge: AppTypography.title1,
+    headlineMedium: AppTypography.title2,
+    headlineSmall: AppTypography.title3,
+    titleLarge: AppTypography.heading1,
+    titleMedium: AppTypography.heading2,
+    titleSmall: AppTypography.label3,
+    bodyLarge: AppTypography.body1,
+    bodyMedium: AppTypography.body2,
+    bodySmall: AppTypography.body3,
+    labelLarge: AppTypography.label2,
+    labelMedium: AppTypography.label4,
+    labelSmall: AppTypography.caption1,
+  );
 
   return ThemeData(
     useMaterial3: true,
     colorScheme: scheme,
     fontFamily: brand.fontFamily,
+    textTheme: textTheme,
     scaffoldBackgroundColor: background,
     appBarTheme: AppBarTheme(
       backgroundColor: background,
-      foregroundColor: isLight ? AppText.s900 : scheme.onSurface,
+      foregroundColor: isLight ? AppSemantic.textPrimary : scheme.onSurface,
       elevation: 0,
       scrolledUnderElevation: 0.5,
       centerTitle: false,
+      titleTextStyle: isLight
+          ? AppTypography.heading1.copyWith(
+              color: AppSemantic.textPrimary,
+              fontFamily: brand.fontFamily,
+            )
+          : null,
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: scheme.primary,
@@ -64,21 +89,24 @@ ThemeData buildTheme(BrandConfig brand, Brightness brightness) {
       shape: RoundedRectangleBorder(
         borderRadius: cardRadius,
         side: isLight
-            ? const BorderSide(color: AppBorder.s100)
+            ? const BorderSide(color: AppSemantic.divider)
             : BorderSide.none,
       ),
     ),
+    dividerTheme: isLight
+        ? const DividerThemeData(color: AppSemantic.divider, thickness: 1)
+        : null,
     inputDecorationTheme: isLight
         ? InputDecorationTheme(
             filled: true,
             fillColor: AppCommon.white,
             border: OutlineInputBorder(
               borderRadius: cardRadius,
-              borderSide: const BorderSide(color: AppBorder.s200),
+              borderSide: const BorderSide(color: AppSemantic.border),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: cardRadius,
-              borderSide: const BorderSide(color: AppBorder.s200),
+              borderSide: const BorderSide(color: AppSemantic.border),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: cardRadius,

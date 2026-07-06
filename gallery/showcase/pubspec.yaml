@@ -1,0 +1,23 @@
+name: showcase
+description: "디자인 시스템 쇼케이스 — 토큰·컴포넌트 갤러리."
+publish_to: 'none'
+version: 0.1.0
+resolution: workspace
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # 공용 패키지 (워크스페이스에서 로컬 resolve)
+  design_system: ^0.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

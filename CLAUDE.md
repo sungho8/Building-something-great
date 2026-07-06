@@ -27,8 +27,17 @@ app_factory/
 ├── apps/
 │   ├── dday/            ← 경량 3계층 (domain/data/presentation) + Riverpod
 │   └── subscription/
-└── gallery/             ← Widgetbook (컴포넌트 전시장)
+└── gallery/
+    └── showcase/        ← 디자인 시스템 쇼케이스 앱 (토큰·컴포넌트 갤러리 + 브랜드 스위처)
 ```
+
+## 디자인 방향 — TDS(토스) 스타일
+
+- **무드:** 흰 배경 + 회색 위계([AppGrey] 뼈대) + 선명한 브랜드 포인트 + 또렷한 타이포
+- **토큰(4종 확정):** `AppGrey/AppBlue/AppRed/AppGreen/AppOrange/AppSemantic`(색),
+  `AppTypography`(display~caption + 버튼용 label1~4), `AppSpacing`(4그리드), `AppRadius`
+- 새 공용 컴포넌트를 만들면 **showcase 컴포넌트 탭에 섹션 추가** (전시 의무)
+- Pretendard 폰트 에셋은 아직 미번들 (번들 전엔 시스템 폰트)
 
 ## 코드 컨벤션 — `docs/CONVENTIONS.md` (필수)
 
@@ -64,11 +73,13 @@ app_factory/
 - Android: core library desugaring 활성화(build.gradle.kts), POST_NOTIFICATIONS 권한
 
 ### 워크스페이스 사용법
-- 설치: `dart pub global activate melos` (PATH에 `~/.pub-cache/bin` 추가)
-- 의존성 일괄: `melos bootstrap`
+- **SDK: FVM 3.41.7 고정** (`.fvmrc`). 셸에서 `export PATH="$HOME/fvm/versions/3.41.7/bin:$HOME/.pub-cache/bin:$PATH"` 후 작업
+  (homebrew flutter는 3.38이라 SDK 불일치 남 — melos 커널 에러 나면 `dart pub global activate melos` 재실행)
+- 의존성 일괄: `melos bootstrap` (또는 루트 `flutter pub get`)
 - 분석/테스트: `melos run analyze` / `melos run test --no-select`
 - 코드 생성(freezed): `melos run gen`
 - dday 실행: `cd apps/dday && flutter run`
+- 쇼케이스 실행: `cd gallery/showcase && flutter run` (크롬: `-d chrome`)
 
 ## 도구
 

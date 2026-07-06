@@ -10,6 +10,7 @@ workspace:
   - packages/design_system
   - packages/core
   - apps/dday
+  - gallery/showcase
 
 dev_dependencies:
   melos: ^7.8.2

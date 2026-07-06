@@ -47,10 +47,7 @@ class AppButton extends StatelessWidget {
     final shape = RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(borderRadius),
     );
-    final textStyle = TextStyle(
-      fontSize: spec.fontSize,
-      fontWeight: AppFontWeight.semiBold,
-    );
+    final textStyle = spec.labelStyle;
     final child = _child(spec);
 
     final Widget button = switch (variant) {
@@ -113,19 +110,18 @@ class AppButton extends StatelessWidget {
   }
 
   _SizeSpec _specOf(AppButtonSize s) => switch (s) {
-        // ⚠️ fontSize는 타입 스케일 수령 전 임시값. 스케일 오면 여기서 교체.
-        AppButtonSize.lg => const _SizeSpec(48, 20, 16, 20),
-        AppButtonSize.md => const _SizeSpec(42, 16, 15, 18),
-        AppButtonSize.sm => const _SizeSpec(36, 14, 14, 16),
-        AppButtonSize.xs => const _SizeSpec(32, 12, 13, 16),
+        AppButtonSize.lg => const _SizeSpec(48, 20, AppTypography.label1, 20),
+        AppButtonSize.md => const _SizeSpec(42, 16, AppTypography.label2, 18),
+        AppButtonSize.sm => const _SizeSpec(36, 14, AppTypography.label3, 16),
+        AppButtonSize.xs => const _SizeSpec(32, 12, AppTypography.label4, 16),
       };
 }
 
 class _SizeSpec {
   final double height;
   final double hPad;
-  final double fontSize;
+  final TextStyle labelStyle;
   final double iconSize;
 
-  const _SizeSpec(this.height, this.hPad, this.fontSize, this.iconSize);
+  const _SizeSpec(this.height, this.hPad, this.labelStyle, this.iconSize);
 }
