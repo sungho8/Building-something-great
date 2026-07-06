@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Android 13+ 알림 권한 -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- 재부팅 후 예약 알림 복원 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:label="dday"
@@ -45,6 +47,17 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/dday_widget_info" />
+        </receiver>
+
+        <!-- 재부팅·앱 업데이트 후 flutter_local_notifications 예약 알림 복원 -->
+        <receiver
+            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
         </receiver>
     </application>
     <!-- Required to query activities that can process text, see:

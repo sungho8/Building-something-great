@@ -38,8 +38,9 @@ ThemeData buildTheme(BrandConfig brand, Brightness brightness) {
         )
       : brandScheme;
 
+  // 브랜드 무드 배경은 라이트 전용 — 다크에 밝은 무드색이 깔리면 텍스트 대비가 깨진다.
   final background =
-      brand.background ?? (isLight ? AppSemantic.bgScreen : scheme.surface);
+      isLight ? (brand.background ?? AppSemantic.bgScreen) : scheme.surface;
   final cardRadius = BorderRadius.circular(brand.radius);
   final fontFamily = brand.fontFamily ?? AppFont.family;
 

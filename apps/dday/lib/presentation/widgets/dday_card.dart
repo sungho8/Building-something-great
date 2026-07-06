@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/dday_item.dart';
 import '../../utils/date_format.dart';
 
-/// D-Day 한 건을 카드로 표시. 제목·날짜 + 큰 라벨(D-N).
+/// D-Day 한 건을 컴팩트 카드로 표시. 이모지·제목·날짜 + 라벨(D-N).
 class DDayCard extends StatelessWidget {
   const DDayCard({super.key, required this.item, this.onTap});
 
@@ -23,28 +23,50 @@ class DDayCard extends StatelessWidget {
           padding: const EdgeInsets.all(AppSpacing.md),
           child: Row(
             children: [
+              if (item.emoji.isNotEmpty) ...[
+                Text(item.emoji, style: const TextStyle(fontSize: 20)),
+                const SizedBox(width: AppSpacing.s12),
+              ],
+
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(item.title, style: theme.textTheme.titleMedium),
+                    Row(
+                      children: [
+                        if (item.pinned) ...[
+                          Icon(Icons.push_pin,
+                              size: 13, color: theme.colorScheme.primary),
+                          const SizedBox(width: 4),
+                        ],
+                        Flexible(
+                          child: Text(
+                            item.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTypography.heading2,
+                          ),
+                        ),
+                      ],
+                    ),
 
-                    AppSpacing.gapSm,
+                    const SizedBox(height: AppSpacing.s4),
 
                     Text(
-                      formatDdayDate(item.date),
-                      style: theme.textTheme.bodySmall
-                          ?.copyWith(color: theme.colorScheme.outline),
+                      formatDdayDate(item.effectiveDate),
+                      style: AppTypography.body3
+                          .copyWith(color: AppSemantic.textTertiary),
                     ),
                   ],
                 ),
               ),
 
+              const SizedBox(width: AppSpacing.s12),
+
               Text(
                 item.label,
-                style: theme.textTheme.headlineSmall?.copyWith(
+                style: AppTypography.title3.copyWith(
                   color: theme.colorScheme.primary,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],

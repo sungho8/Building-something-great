@@ -60,13 +60,13 @@ app_factory/
 
 - [x] 모노레포 골격 세팅 (Dart workspace + Melos 7, design_system·core·dday 연결, analyze/test 통과)
 - [~] design_system: 골격 + 코어(BrandConfig/AppFactory/AppButton/AppCard/AppSpacing) 구현. 토큰·컴포넌트 확장 필요
-- [~] D-Day MVP 개발 중:
-  - [x] 목록 / 추가·편집 화면 (Riverpod 상태관리)
-  - [x] 로컬 저장 (core `LocalStore`, shared_preferences)
-  - [x] 알림 (core `NotificationService`, D-Day 당일 오전 9시)
-  - [x] 홈 위젯 — Android 완료 (APK 빌드 통과). iOS는 Xcode 작업 필요 → `docs/HOME_WIDGET.md`
-  - [ ] AdMob 광고 붙이기 (수익화) — 미착수
-  - [ ] 스토어 등록·심사 — 미착수
+- [~] D-Day MVP 개발 중 (로드맵: `docs/DDAY_ROADMAP.md`):
+  - [x] 목록(히어로+컴팩트 카드)/추가·편집 화면 (Riverpod)
+  - [x] 로컬 저장 (core `LocalStore`) + 알림 (core `NotificationService`, 당일/1일전/7일전)
+  - [x] 홈 위젯 — Android 완료. iOS는 Xcode 작업 필요 → `docs/HOME_WIDGET.md`
+  - [x] Phase 1(세련화: 히어로 카드·D-DAY 강조·애니메이션·햅틱·스와이프삭제+실행취소·다크모드 수정)
+  - [x] Phase 2(기능: 매년반복/N주년·이모지·다중알림·시작일포함·고정·부팅복원)
+  - [ ] Phase 3: 게스트모드/소셜로그인/Firebase, AdMob, 앱아이콘, 스토어 심사 — 미착수
 
 ### 추가된 의존성
 - core: shared_preferences, flutter_local_notifications, timezone, flutter_timezone
