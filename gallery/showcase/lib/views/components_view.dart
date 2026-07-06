@@ -294,11 +294,164 @@ class ComponentsView extends StatelessWidget {
 
         const SizedBox(height: AppSpacing.s32),
 
+        const Text('AppSegmentedControl', style: AppTypography.heading1),
+
+        const SizedBox(height: AppSpacing.s12),
+
+        const _SegmentedDemo(),
+
+        const SizedBox(height: AppSpacing.s32),
+
+        const Text('AppCheckbox · AppRadioGroup', style: AppTypography.heading1),
+
+        const SizedBox(height: AppSpacing.s12),
+
+        const _SelectionDemo(),
+
+        const SizedBox(height: AppSpacing.s32),
+
+        const Text('AppDropdown', style: AppTypography.heading1),
+
+        const SizedBox(height: AppSpacing.s12),
+
+        const _DropdownDemo(),
+
+        const SizedBox(height: AppSpacing.s32),
+
+        const Text('AppAvatar', style: AppTypography.heading1),
+
+        const SizedBox(height: AppSpacing.s12),
+
+        Row(
+          children: [
+            const AppAvatar(icon: Icons.person, size: 48),
+            const SizedBox(width: AppSpacing.s12),
+            AppAvatar(
+              initials: 'SH',
+              size: 48,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            const SizedBox(width: AppSpacing.s12),
+            const AppAvatar(initials: '박', size: 48, color: AppGreen.s500),
+            const SizedBox(width: AppSpacing.s12),
+            const AppAvatar(initials: 'A', size: 40, color: AppOrange.s600),
+            const SizedBox(width: AppSpacing.s12),
+            const AppAvatar(initials: 'B', size: 32, color: AppBlue.s500),
+          ],
+        ),
+
+        const SizedBox(height: AppSpacing.s32),
+
+        const Text('AppLoading', style: AppTypography.heading1),
+
+        const SizedBox(height: AppSpacing.s12),
+
+        const SizedBox(height: 80, child: AppLoading(message: '불러오는 중…')),
+
+        const SizedBox(height: AppSpacing.s32),
+
         Text(
           '새 공용 컴포넌트를 만들면 이 화면에 섹션을 추가한다.',
           style: AppTypography.caption1
               .copyWith(color: AppSemantic.textTertiary),
         ),
+      ],
+    );
+  }
+}
+
+/// AppSegmentedControl 데모.
+class _SegmentedDemo extends StatefulWidget {
+  const _SegmentedDemo();
+
+  @override
+  State<_SegmentedDemo> createState() => _SegmentedDemoState();
+}
+
+class _SegmentedDemoState extends State<_SegmentedDemo> {
+  // 선택된 세그먼트
+  String _value = 'day';
+
+  @override
+  Widget build(BuildContext context) {
+    return AppSegmentedControl<String>(
+      value: _value,
+      onChanged: (v) => setState(() => _value = v),
+      segments: const [
+        AppSegment(value: 'day', label: '일'),
+        AppSegment(value: 'week', label: '주'),
+        AppSegment(value: 'month', label: '월'),
+      ],
+    );
+  }
+}
+
+/// AppCheckbox + AppRadioGroup 데모.
+class _SelectionDemo extends StatefulWidget {
+  const _SelectionDemo();
+
+  @override
+  State<_SelectionDemo> createState() => _SelectionDemoState();
+}
+
+class _SelectionDemoState extends State<_SelectionDemo> {
+  // 체크 여부
+  bool _checked = true;
+
+  // 라디오 선택값
+  String _radio = 'onday';
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppCheckbox(
+          value: _checked,
+          label: '약관에 동의합니다',
+          onChanged: (v) => setState(() => _checked = v),
+        ),
+
+        const SizedBox(height: AppSpacing.s8),
+
+        AppRadioGroup<String>(
+          groupValue: _radio,
+          onChanged: (v) => setState(() => _radio = v),
+          options: const [
+            AppRadioOption(
+                value: 'onday', label: '당일', description: '이벤트 당일 오전 9시'),
+            AppRadioOption(
+                value: 'before', label: '1일 전', description: '하루 전 미리 알림'),
+            AppRadioOption(value: 'none', label: '안 함'),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// AppDropdown 데모.
+class _DropdownDemo extends StatefulWidget {
+  const _DropdownDemo();
+
+  @override
+  State<_DropdownDemo> createState() => _DropdownDemoState();
+}
+
+class _DropdownDemoState extends State<_DropdownDemo> {
+  // 선택된 값
+  String? _value = 'kr';
+
+  @override
+  Widget build(BuildContext context) {
+    return AppDropdown<String>(
+      label: '지역',
+      value: _value,
+      onChanged: (v) => setState(() => _value = v),
+      items: const [
+        AppDropdownItem(value: 'kr', label: '대한민국', icon: Icons.flag_outlined),
+        AppDropdownItem(value: 'us', label: '미국', icon: Icons.flag_outlined),
+        AppDropdownItem(value: 'jp', label: '일본', icon: Icons.flag_outlined),
       ],
     );
   }

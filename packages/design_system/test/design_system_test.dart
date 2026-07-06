@@ -98,6 +98,72 @@ void main() {
     expect(find.text('항목을 추가해보세요'), findsOneWidget);
   });
 
+  testWidgets('AppCheckbox 라벨 탭 시 값이 토글된다', (tester) async {
+    var value = false;
+    await tester.pumpWidget(
+      AppFactory(
+        brand: const BrandConfig(seed: Color(0xFF2E6BFF)),
+        home: Scaffold(
+          body: StatefulBuilder(
+            builder: (context, setState) => AppCheckbox(
+              value: value,
+              label: '동의',
+              onChanged: (v) => setState(() => value = v),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('동의'));
+    await tester.pump();
+    expect(value, isTrue);
+  });
+
+  testWidgets('AppRadioGroup 선택 시 콜백이 값을 준다', (tester) async {
+    String? picked;
+    await tester.pumpWidget(
+      AppFactory(
+        brand: const BrandConfig(seed: Color(0xFF2E6BFF)),
+        home: Scaffold(
+          body: AppRadioGroup<String>(
+            groupValue: 'a',
+            onChanged: (v) => picked = v,
+            options: const [
+              AppRadioOption(value: 'a', label: '가'),
+              AppRadioOption(value: 'b', label: '나'),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('나'));
+    expect(picked, 'b');
+  });
+
+  testWidgets('AppSegmentedControl 탭 시 값이 바뀐다', (tester) async {
+    String value = 'x';
+    await tester.pumpWidget(
+      AppFactory(
+        brand: const BrandConfig(seed: Color(0xFF2E6BFF)),
+        home: Scaffold(
+          body: AppSegmentedControl<String>(
+            value: value,
+            onChanged: (v) => value = v,
+            segments: const [
+              AppSegment(value: 'x', label: 'X'),
+              AppSegment(value: 'y', label: 'Y'),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Y'));
+    expect(value, 'y');
+  });
+
   testWidgets('AppBadge 변형 3종이 렌더된다', (tester) async {
     await tester.pumpWidget(
       const AppFactory(
