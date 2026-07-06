@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../tokens/typography.dart';
+
 /// 앱의 분위기. 컴포넌트가 미세하게 다르게 반응할 수 있는 힌트.
 enum Vibe { soft, crisp }
 
@@ -15,7 +17,7 @@ class BrandConfig {
   /// 화면 배경색(앱 무드). null이면 중립 회색 기본값.
   final Color? background;
 
-  /// 폰트 패밀리. null이면 플랫폼 기본 폰트.
+  /// 폰트 패밀리. null이면 기본값(Pretendard, [AppFont.family]) 사용.
   final String? fontFamily;
 
   /// 모서리 둥글기.

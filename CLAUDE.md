@@ -37,7 +37,8 @@ app_factory/
 - **토큰(4종 확정):** `AppGrey/AppBlue/AppRed/AppGreen/AppOrange/AppSemantic`(색),
   `AppTypography`(display~caption + 버튼용 label1~4), `AppSpacing`(4그리드), `AppRadius`
 - 새 공용 컴포넌트를 만들면 **showcase 컴포넌트 탭에 섹션 추가** (전시 의무)
-- Pretendard 폰트 에셋은 아직 미번들 (번들 전엔 시스템 폰트)
+- **Pretendard 번들 완료** (Regular/SemiBold/Bold, `packages/design_system/assets/fonts/`). `AppFont.family`는
+  `packages/design_system/Pretendard` (패키지 네임스페이스 접두사 필수 — 없으면 조용히 시스템 폰트로 폴백됨, `docs/KNOWN_ISSUES.md` #3 참고)
 
 ## 코드 컨벤션 — `docs/CONVENTIONS.md` (필수)
 

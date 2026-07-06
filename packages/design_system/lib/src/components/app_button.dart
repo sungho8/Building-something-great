@@ -43,11 +43,16 @@ class AppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final spec = _specOf(size);
-    final primary = Theme.of(context).colorScheme.primary;
+    final theme = Theme.of(context);
+    final primary = theme.colorScheme.primary;
     final shape = RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(borderRadius),
     );
-    final textStyle = spec.labelStyle;
+    // ButtonStyle.textStyle은 Theme.textTheme merge 경로를 타지 않으므로,
+    // 폰트 패밀리를 여기서 명시적으로 이어받아야 브랜드 폰트가 버튼에도 적용된다.
+    final textStyle = spec.labelStyle.copyWith(
+      fontFamily: theme.textTheme.bodyMedium?.fontFamily,
+    );
     final child = _child(spec);
 
     final Widget button = switch (variant) {

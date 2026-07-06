@@ -41,6 +41,7 @@ ThemeData buildTheme(BrandConfig brand, Brightness brightness) {
   final background =
       brand.background ?? (isLight ? AppSemantic.bgScreen : scheme.surface);
   final cardRadius = BorderRadius.circular(brand.radius);
+  final fontFamily = brand.fontFamily ?? AppFont.family;
 
   // TDS 스케일을 Material textTheme 슬롯에 매핑.
   const textTheme = TextTheme(
@@ -62,7 +63,7 @@ ThemeData buildTheme(BrandConfig brand, Brightness brightness) {
   return ThemeData(
     useMaterial3: true,
     colorScheme: scheme,
-    fontFamily: brand.fontFamily,
+    fontFamily: fontFamily,
     textTheme: textTheme,
     scaffoldBackgroundColor: background,
     appBarTheme: AppBarTheme(
@@ -74,7 +75,7 @@ ThemeData buildTheme(BrandConfig brand, Brightness brightness) {
       titleTextStyle: isLight
           ? AppTypography.heading1.copyWith(
               color: AppSemantic.textPrimary,
-              fontFamily: brand.fontFamily,
+              fontFamily: fontFamily,
             )
           : null,
     ),

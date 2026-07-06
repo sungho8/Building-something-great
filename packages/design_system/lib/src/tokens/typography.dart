@@ -8,9 +8,16 @@ import 'package:flutter/widgets.dart';
 
 /// 기본 폰트 패밀리.
 ///
-/// ⚠️ Pretendard 에셋은 아직 번들되지 않았다. 번들 전에는 시스템 폰트로 렌더된다.
+/// Pretendard Regular(400)·SemiBold(600)·Bold(700) 3종을 design_system 패키지
+/// 에셋으로 번들한다. `buildTheme`이 [BrandConfig.fontFamily]가 null이면 이 값을
+/// 기본으로 사용하므로, 모든 앱이 별도 설정 없이 Pretendard로 렌더된다.
+///
+/// ⚠️ `packages/design_system/` 접두사 필수. design_system은 각 앱(dday 등)
+/// 입장에서 의존 패키지라, Flutter가 폰트 매니페스트에 family를
+/// `packages/design_system/Pretendard`로 네임스페이싱해서 등록한다. 접두사 없이
+/// 'Pretendard'만 쓰면 매칭 실패 → 에러 없이 조용히 시스템 폰트로 폴백된다.
 abstract final class AppFont {
-  static const String family = 'Pretendard';
+  static const String family = 'packages/design_system/Pretendard';
 }
 
 /// 폰트 굵기
