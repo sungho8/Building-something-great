@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/dday_item.dart';
 import '../../utils/date_format.dart';
 
-/// 최상단 강조 카드. 큰 D-라벨 + 날짜 + 진행 게이지.
+/// 최상단 강조 카드.
 ///
-/// D-DAY 당일이면 브랜드색으로 꽉 채워 축하 무드를 낸다.
+/// 디자인 규칙(흰 배경 + 위젯이 KeyColor를 짊어짐)에 따라, 화면에서 색을 짊어지는
+/// 주역이다. 브랜드색으로 꽉 채우고, D-DAY 당일엔 축하 문구를 더한다.
 class DDayHeroCard extends StatelessWidget {
   const DDayHeroCard({
     super.key,
@@ -21,24 +22,18 @@ class DDayHeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
+    final scheme = Theme.of(context).colorScheme;
+    final onColor = scheme.onPrimary;
+    final subColor = onColor.withValues(alpha: 0.85);
     final isToday = item.daysFromToday == 0;
-
-    final fg = isToday ? scheme.onPrimary : scheme.onSurface;
-    final subFg = isToday
-        ? scheme.onPrimary.withValues(alpha: 0.85)
-        : AppSemantic.textTertiary;
-    final labelColor = isToday ? scheme.onPrimary : scheme.primary;
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: isToday ? scheme.primary : scheme.surface,
+        color: scheme.primary,
         borderRadius: BorderRadius.circular(AppRadius.xl),
-        border: isToday ? null : Border.all(color: AppSemantic.border),
         boxShadow: [
           BoxShadow(
-            color: scheme.primary.withValues(alpha: isToday ? 0.28 : 0.08),
+            color: scheme.primary.withValues(alpha: 0.30),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -66,7 +61,7 @@ class DDayHeroCard extends StatelessWidget {
                         item.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: AppTypography.title3.copyWith(color: fg),
+                        style: AppTypography.title3.copyWith(color: onColor),
                       ),
                     ),
                     if (onPinToggle != null)
@@ -78,7 +73,7 @@ class DDayHeroCard extends StatelessWidget {
                               ? Icons.push_pin
                               : Icons.push_pin_outlined,
                           size: 20,
-                          color: item.pinned ? labelColor : subFg,
+                          color: item.pinned ? onColor : subColor,
                         ),
                       ),
                   ],
@@ -89,7 +84,7 @@ class DDayHeroCard extends StatelessWidget {
                 Text(
                   item.label,
                   style: AppTypography.display.copyWith(
-                    color: labelColor,
+                    color: onColor,
                     fontSize: 44,
                     height: 1.0,
                   ),
@@ -101,26 +96,34 @@ class DDayHeroCard extends StatelessWidget {
                   children: [
                     Text(
                       formatDdayDate(item.effectiveDate),
-                      style: AppTypography.body3.copyWith(color: subFg),
+                      style: AppTypography.body3.copyWith(color: subColor),
                     ),
                     if (item.anniversaryYears != null) ...[
                       const SizedBox(width: AppSpacing.s8),
-                      _Badge(
-                        text: '${item.anniversaryYears}주년',
-                        color: labelColor,
-                      ),
+                      _Badge(text: '${item.anniversaryYears}주년', on: onColor),
                     ],
                   ],
                 ),
 
-                if (item.progress != null) ...[
+                if (isToday) ...[
+                  const SizedBox(height: AppSpacing.s8),
+                  Text(
+                    '오늘이에요 🎉',
+                    style: AppTypography.body2.copyWith(
+                      color: onColor,
+                      fontWeight: AppFontWeight.bold,
+                    ),
+                  ),
+                ] else if (item.progress != null) ...[
                   const SizedBox(height: AppSpacing.s16),
-                  _ProgressBar(
-                    value: item.progress!,
-                    color: labelColor,
-                    track: isToday
-                        ? scheme.onPrimary.withValues(alpha: 0.25)
-                        : AppSemantic.divider,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(AppRadius.max),
+                    child: LinearProgressIndicator(
+                      value: item.progress,
+                      minHeight: 6,
+                      backgroundColor: onColor.withValues(alpha: 0.25),
+                      valueColor: AlwaysStoppedAnimation(onColor),
+                    ),
                   ),
                 ],
               ],
@@ -132,12 +135,12 @@ class DDayHeroCard extends StatelessWidget {
   }
 }
 
-/// N주년 등 작은 배지.
+/// N주년 등 작은 배지 (채운 카드 위에 얹는 반투명 흰 필).
 class _Badge extends StatelessWidget {
-  const _Badge({required this.text, required this.color});
+  const _Badge({required this.text, required this.on});
 
   final String text;
-  final Color color;
+  final Color on;
 
   @override
   Widget build(BuildContext context) {
@@ -147,41 +150,15 @@ class _Badge extends StatelessWidget {
         vertical: 2,
       ),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.14),
+        color: on.withValues(alpha: 0.18),
         borderRadius: BorderRadius.circular(AppRadius.sm),
       ),
       child: Text(
         text,
         style: AppTypography.caption1.copyWith(
-          color: color,
+          color: on,
           fontWeight: AppFontWeight.semiBold,
         ),
-      ),
-    );
-  }
-}
-
-/// 둥근 진행 게이지.
-class _ProgressBar extends StatelessWidget {
-  const _ProgressBar({
-    required this.value,
-    required this.color,
-    required this.track,
-  });
-
-  final double value;
-  final Color color;
-  final Color track;
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(AppRadius.max),
-      child: LinearProgressIndicator(
-        value: value,
-        minHeight: 6,
-        backgroundColor: track,
-        valueColor: AlwaysStoppedAnimation(color),
       ),
     );
   }

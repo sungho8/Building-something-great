@@ -38,9 +38,8 @@ ThemeData buildTheme(BrandConfig brand, Brightness brightness) {
         )
       : brandScheme;
 
-  // 브랜드 무드 배경은 라이트 전용 — 다크에 밝은 무드색이 깔리면 텍스트 대비가 깨진다.
-  final background =
-      isLight ? (brand.background ?? AppSemantic.bgScreen) : scheme.surface;
+  // 디자인 규칙: 화면 배경은 흰색 고정. 색은 위젯이 짊어진다.
+  final background = isLight ? AppSemantic.bgScreen : scheme.surface;
   final cardRadius = BorderRadius.circular(brand.radius);
   final fontFamily = brand.fontFamily ?? AppFont.family;
 
@@ -90,8 +89,9 @@ ThemeData buildTheme(BrandConfig brand, Brightness brightness) {
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
         borderRadius: cardRadius,
+        // 흰 배경 위 흰 카드 — 아웃라인으로 구분(배경이 아니라 위젯이 형태를 가짐).
         side: isLight
-            ? const BorderSide(color: AppSemantic.divider)
+            ? const BorderSide(color: AppSemantic.border)
             : BorderSide.none,
       ),
     ),

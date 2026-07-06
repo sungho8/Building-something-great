@@ -9,13 +9,14 @@ enum Vibe { soft, crisp }
 ///
 /// 컴포넌트는 이 객체를 직접 모른다. [buildTheme]이 이걸 [ThemeData]로 바꿔
 /// `Theme.of(context)`로 흘려보내고, 컴포넌트는 그 Theme만 본다.
+///
+/// 디자인 규칙: **화면 배경은 흰색으로 고정**한다. 색은 배경이 아니라 위젯이
+/// 짊어진다(채움 또는 아웃라인). 그래서 브랜드는 배경색을 갖지 않고, 특정 화면이
+/// 예외적으로 배경색이 필요하면 `AppScaffold(backgroundColor:)`로 개별 지정한다.
 @immutable
 class BrandConfig {
-  /// 대표 색(포인트). primary로 원색 그대로 쓰인다.
+  /// 대표 색(포인트/KeyColor). primary로 원색 그대로 쓰인다.
   final Color seed;
-
-  /// 화면 배경색(앱 무드). null이면 중립 회색 기본값.
-  final Color? background;
 
   /// 폰트 패밀리. null이면 기본값(Pretendard, [AppFont.family]) 사용.
   final String? fontFamily;
@@ -28,7 +29,6 @@ class BrandConfig {
 
   const BrandConfig({
     required this.seed,
-    this.background,
     this.fontFamily,
     this.radius = 12,
     this.vibe = Vibe.soft,

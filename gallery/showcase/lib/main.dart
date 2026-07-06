@@ -16,11 +16,7 @@ const brandPresets = <(String, BrandConfig)>[
   ),
   (
     'D-Day Coral',
-    BrandConfig(
-      seed: Color(0xFFFF5B7F),
-      background: Color(0xFFFFF1F4),
-      radius: 16,
-    ),
+    BrandConfig(seed: Color(0xFFFF5B7F), radius: 16),
   ),
   (
     'Egg Purple',

@@ -34,6 +34,8 @@ app_factory/
 ## 디자인 방향 — TDS(토스) 스타일
 
 - **무드:** 흰 배경 + 회색 위계([AppGrey] 뼈대) + 선명한 브랜드 포인트 + 또렷한 타이포
+- **배경 규칙:** 화면 배경은 **흰색 고정**. 색은 배경이 아니라 **위젯이 짊어진다**(채움/아웃라인).
+  `BrandConfig`엔 배경색이 없다. 특정 화면만 예외적으로 `AppScaffold(backgroundColor:)`. (자세히: `docs/CONVENTIONS.md`)
 - **토큰(4종 확정):** `AppGrey/AppBlue/AppRed/AppGreen/AppOrange/AppSemantic`(색),
   `AppTypography`(display~caption + 버튼용 label1~4), `AppSpacing`(4그리드), `AppRadius`
 - 새 공용 컴포넌트를 만들면 **showcase 컴포넌트 탭에 섹션 추가** (전시 의무)
