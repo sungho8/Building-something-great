@@ -98,6 +98,15 @@ ThemeData buildTheme(BrandConfig brand, Brightness brightness) {
     dividerTheme: isLight
         ? const DividerThemeData(color: AppSemantic.divider, thickness: 1)
         : null,
+    // 리스트·토글 항목 라벨은 강조(itemTitle), 보조 설명은 본문(descriptionSub).
+    listTileTheme: ListTileThemeData(
+      titleTextStyle: AppTypography.itemTitle.copyWith(
+        color: isLight ? AppSemantic.textPrimary : scheme.onSurface,
+      ),
+      subtitleTextStyle: AppTypography.descriptionSub.copyWith(
+        color: isLight ? AppSemantic.textTertiary : scheme.onSurfaceVariant,
+      ),
+    ),
     inputDecorationTheme: isLight
         ? InputDecorationTheme(
             filled: true,

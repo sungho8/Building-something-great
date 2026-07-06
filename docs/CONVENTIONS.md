@@ -17,6 +17,20 @@
 - 흰 배경 위 흰 카드는 **아웃라인(`AppSemantic.border`)** 으로 구분 (그림자 남발 금지).
 - 회색 위계(`AppGrey`/`AppSemantic`)로 텍스트·보더·구분선을 만든다.
 
+### 타이포 역할 (강조 vs 본문)
+
+텍스트는 "무슨 텍스트냐"로 스타일을 고른다. 굵기/색으로 **강조**와 **본문**을 명확히 나눈다.
+
+| 역할 | 토큰 | 용도 |
+|---|---|---|
+| 강조 · 항목 라벨 | `AppTypography.itemTitle` (17 semibold) | 토글·리스트 좌측 텍스트, 카드 제목 |
+| 강조 · 섹션 헤더 | `AppTypography.sectionTitle` (15 semibold, `textSecondary`) | 그룹 위 라벨 |
+| 본문 · 설명 | `AppTypography.description` (15 regular) | 일반 설명 |
+| 본문 · 보조 | `AppTypography.descriptionSub` (13 regular, `textTertiary`) | 캡션·보조 설명 |
+
+- 리스트/토글 항목 라벨·보조설명은 `ListTileThemeData`(buildTheme)가 자동으로 위 역할을 입힌다 → `ListTile`/`SwitchListTile`을 쓰면 별도 스타일 지정 없이 일관됨.
+- 본문 텍스트를 `heading*`/`title*`로, 강조 라벨을 `body*`로 쓰지 않는다 (역할 뒤섞기 금지).
+
 ---
 
 ## 아키텍처: 경량 3계층 + Riverpod

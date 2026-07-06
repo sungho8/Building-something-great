@@ -214,7 +214,11 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
 
           const SizedBox(height: AppSpacing.s20),
 
-          Text('알림', style: AppTypography.heading2),
+          Text(
+            '알림',
+            style: AppTypography.sectionTitle
+                .copyWith(color: AppSemantic.textSecondary),
+          ),
 
           const SizedBox(height: AppSpacing.s8),
 

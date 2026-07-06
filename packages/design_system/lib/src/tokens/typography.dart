@@ -141,4 +141,19 @@ abstract final class AppTypography {
     height: 18 / 13,
     fontWeight: AppFontWeight.semiBold,
   );
+
+  // ── 역할 별칭 (강조 vs 본문) ─────────────────────────────
+  // "무슨 텍스트냐"로 고른다. 강조(semibold)와 본문(regular)을 명확히 나눈다.
+
+  /// 강조 · 위젯/리스트 항목 라벨 (토글·리스트 좌측 텍스트, 카드 제목)
+  static const itemTitle = heading1; // 17 semibold
+
+  /// 강조 · 섹션 헤더 (그룹 위 라벨). 보통 textSecondary 색과 함께.
+  static const sectionTitle = heading2; // 15 semibold
+
+  /// 본문 · 기본 설명 텍스트
+  static const description = body2; // 15 regular
+
+  /// 본문 · 보조 설명·캡션
+  static const descriptionSub = body3; // 13 regular
 }
