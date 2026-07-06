@@ -12,7 +12,7 @@ const _emojiPresets = [
   '🎂', '💍', '✈️', '🎓', '🎉', '❤️', '📚', '🏃', '💼', '🐣', //
 ];
 
-/// 색상 프리셋 (ARGB). 첫 스와치는 '기본(브랜드색)' = null이라 여기엔 없음.
+/// 색상 프리셋. 첫 스와치는 화면에서 '기본(브랜드색)'으로 별도 표시.
 const _colorPresets = <int>[
   0xFF3182F6, // blue
   0xFF02BC70, // green
@@ -66,7 +66,7 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
     _repeatYearly = item?.repeatYearly ?? false;
     _includeStartDay = item?.includeStartDay ?? false;
     _pinned = item?.pinned ?? false;
-    _reminders = {...?item?.reminders} ;
+    _reminders = {...?item?.reminders};
     if (item == null) _reminders = {DdayReminder.onDay};
   }
 
@@ -85,6 +85,31 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
       lastDate: DateTime(2100),
     );
     if (picked != null) setState(() => _date = picked);
+  }
+
+  // 이모지 선택 바텀시트
+  Future<void> _pickEmoji() async {
+    final picked = await showAppEmojiPickerSheet(
+      context,
+      presets: _emojiPresets,
+      selected: _emoji,
+    );
+    if (picked != null) setState(() => _emoji = picked);
+  }
+
+  // 색상 선택 바텀시트
+  Future<void> _pickColor() async {
+    final brand = Theme.of(context).colorScheme.primary;
+    final current = _colorValue == null ? brand : Color(_colorValue!);
+    final picked = await showAppColorPickerSheet(
+      context,
+      presets: [brand, for (final v in _colorPresets) Color(v)],
+      selected: current,
+    );
+    if (picked == null) return;
+    setState(() {
+      _colorValue = picked.toARGB32() == brand.toARGB32() ? null : picked.toARGB32();
+    });
   }
 
   // 저장
@@ -139,6 +164,9 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
 
   @override
   Widget build(BuildContext context) {
+    final brand = Theme.of(context).colorScheme.primary;
+    final swatchColor = _colorValue == null ? brand : Color(_colorValue!);
+
     return AppScaffold(
       appBar: AppBar(
         title: Text(_isEditing ? '편집' : '새 D-Day'),
@@ -165,62 +193,63 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
             textInputAction: TextInputAction.done,
           ),
 
-          const SizedBox(height: AppSpacing.s20),
-
-          _EmojiPicker(
-            selected: _emoji,
-            onSelected: (e) => setState(() => _emoji = e),
-          ),
-
           const SizedBox(height: AppSpacing.s16),
 
-          _ColorPicker(
-            selected: _colorValue,
-            onSelected: (c) => setState(() => _colorValue = c),
+          // 이모지·색상 선택 버튼 (탭하면 바텀시트)
+          Row(
+            children: [
+              Expanded(
+                child: _PickerButton(
+                  label: '이모지',
+                  onTap: _pickEmoji,
+                  child: _emoji.isEmpty
+                      ? const Icon(Icons.mood_outlined,
+                          color: AppSemantic.textTertiary)
+                      : Text(_emoji, style: const TextStyle(fontSize: 20)),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.s12),
+              Expanded(
+                child: _PickerButton(
+                  label: '색상',
+                  onTap: _pickColor,
+                  child: AppColorSwatch(color: swatchColor, size: 22),
+                ),
+              ),
+            ],
           ),
 
           const SizedBox(height: AppSpacing.s20),
 
-          AppCard(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s16),
-            child: AppListTile(
-              leadingIcon: Icons.calendar_today_outlined,
-              title: '날짜',
-              subtitle: formatDdayDate(_date),
-              onTap: _pickDate,
-            ),
+          AppListTile(
+            leadingIcon: Icons.calendar_today_outlined,
+            title: '날짜',
+            subtitle: formatDdayDate(_date),
+            onTap: _pickDate,
+          ),
+
+          const Divider(height: AppSpacing.s20),
+
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            value: _repeatYearly,
+            onChanged: (v) => setState(() => _repeatYearly = v),
+            title: const Text('매년 반복'),
+          ),
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            value: _includeStartDay,
+            onChanged: (v) => setState(() => _includeStartDay = v),
+            title: const Text('시작일 포함'),
+          ),
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            value: _pinned,
+            onChanged: (v) => setState(() => _pinned = v),
+            title: const Text('고정'),
           ),
 
           const SizedBox(height: AppSpacing.s12),
-
-          AppCard(
-            child: Column(
-              children: [
-                SwitchListTile(
-                  contentPadding: EdgeInsets.zero,
-                  value: _repeatYearly,
-                  onChanged: (v) => setState(() => _repeatYearly = v),
-                  title: const Text('매년 반복'),
-                ),
-                const Divider(height: 1),
-                SwitchListTile(
-                  contentPadding: EdgeInsets.zero,
-                  value: _includeStartDay,
-                  onChanged: (v) => setState(() => _includeStartDay = v),
-                  title: const Text('시작일 포함'),
-                ),
-                const Divider(height: 1),
-                SwitchListTile(
-                  contentPadding: EdgeInsets.zero,
-                  value: _pinned,
-                  onChanged: (v) => setState(() => _pinned = v),
-                  title: const Text('고정'),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: AppSpacing.s20),
 
           const AppSectionTitle(text: '알림'),
 
@@ -256,134 +285,38 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
   }
 }
 
-/// 이모지 선택 가로 목록 (없음 포함).
-class _EmojiPicker extends StatelessWidget {
-  const _EmojiPicker({required this.selected, required this.onSelected});
-
-  final String selected;
-  final ValueChanged<String> onSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-
-    return SizedBox(
-      height: 44,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          _EmojiChip(
-            label: const Icon(Icons.block, size: 18),
-            active: selected.isEmpty,
-            onTap: () => onSelected(''),
-            scheme: scheme,
-          ),
-          for (final e in _emojiPresets)
-            _EmojiChip(
-              label: Text(e, style: const TextStyle(fontSize: 20)),
-              active: selected == e,
-              onTap: () => onSelected(e),
-              scheme: scheme,
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _EmojiChip extends StatelessWidget {
-  const _EmojiChip({
+/// 이모지/색상 선택 버튼. 라벨 + 현재 값 미리보기 + chevron.
+class _PickerButton extends StatelessWidget {
+  const _PickerButton({
     required this.label,
-    required this.active,
-    required this.onTap,
-    required this.scheme,
-  });
-
-  final Widget label;
-  final bool active;
-  final VoidCallback onTap;
-  final ColorScheme scheme;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: AppSpacing.s8),
-      child: Material(
-        color: active ? scheme.primary.withValues(alpha: 0.12) : AppCommon.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
-          side: BorderSide(
-            color: active ? scheme.primary : AppSemantic.border,
-            width: active ? 1.5 : 1,
-          ),
-        ),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(AppRadius.md),
-          child: SizedBox(width: 44, child: Center(child: label)),
-        ),
-      ),
-    );
-  }
-}
-
-/// 색상 선택 가로 목록. 첫 스와치는 '기본(브랜드색)' = null.
-class _ColorPicker extends StatelessWidget {
-  const _ColorPicker({required this.selected, required this.onSelected});
-
-  final int? selected;
-  final ValueChanged<int?> onSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    final brand = Theme.of(context).colorScheme.primary;
-
-    return SizedBox(
-      height: 36,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          _Swatch(
-            color: brand,
-            selected: selected == null,
-            onTap: () => onSelected(null),
-          ),
-          for (final value in _colorPresets)
-            _Swatch(
-              color: Color(value),
-              selected: selected == value,
-              onTap: () => onSelected(value),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _Swatch extends StatelessWidget {
-  const _Swatch({
-    required this.color,
-    required this.selected,
+    required this.child,
     required this.onTap,
   });
 
-  final Color color;
-  final bool selected;
+  final String label;
+  final Widget child;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: AppSpacing.s8),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: 36,
-          height: 36,
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-          child: selected
-              ? const Icon(Icons.check, color: AppCommon.white, size: 20)
-              : null,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(AppRadius.lg),
+      child: Container(
+        height: 52,
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s16),
+        decoration: BoxDecoration(
+          border: Border.all(color: AppSemantic.border),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+        ),
+        child: Row(
+          children: [
+            child,
+            const SizedBox(width: AppSpacing.s8),
+            Text(label, style: AppTypography.body2),
+            const Spacer(),
+            const Icon(Icons.chevron_right, size: 18, color: AppGrey.s400),
+          ],
         ),
       ),
     );

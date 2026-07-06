@@ -294,6 +294,15 @@ class ComponentsView extends StatelessWidget {
 
         const SizedBox(height: AppSpacing.s32),
 
+        const Text('ColorPicker · EmojiPicker (BottomSheet)',
+            style: AppTypography.heading1),
+
+        const SizedBox(height: AppSpacing.s12),
+
+        const _PickerSheetDemo(),
+
+        const SizedBox(height: AppSpacing.s32),
+
         const Text('AppSegmentedControl', style: AppTypography.heading1),
 
         const SizedBox(height: AppSpacing.s12),
@@ -533,6 +542,70 @@ class _FadeSlideDemoState extends State<_FadeSlideDemo> {
           variant: AppButtonVariant.secondary,
           leadingIcon: Icons.replay,
           onPressed: () => setState(() => _round++),
+        ),
+      ],
+    );
+  }
+}
+
+/// ColorPicker · EmojiPicker 바텀시트 데모.
+class _PickerSheetDemo extends StatefulWidget {
+  const _PickerSheetDemo();
+
+  @override
+  State<_PickerSheetDemo> createState() => _PickerSheetDemoState();
+}
+
+class _PickerSheetDemoState extends State<_PickerSheetDemo> {
+  // 선택된 색 (null이면 기본)
+  Color? _color;
+
+  // 선택된 이모지 (빈 문자열이면 없음)
+  String _emoji = '';
+
+  static const _colorPresets = <Color>[
+    AppBlue.s500,
+    AppGreen.s500,
+    AppOrange.s600,
+    AppRed.s500,
+  ];
+
+  static const _emojiPresets = ['🎉', '💰', '📌', '⭐', '🔥'];
+
+  @override
+  Widget build(BuildContext context) {
+    final brand = Theme.of(context).colorScheme.primary;
+
+    return Row(
+      children: [
+        Expanded(
+          child: OutlinedButton.icon(
+            onPressed: () async {
+              final picked = await showAppColorPickerSheet(
+                context,
+                presets: _colorPresets,
+                selected: _color ?? brand,
+              );
+              if (picked != null) setState(() => _color = picked);
+            },
+            icon: AppColorSwatch(color: _color ?? brand, size: 20),
+            label: const Text('색상 선택'),
+          ),
+        ),
+        const SizedBox(width: AppSpacing.s12),
+        Expanded(
+          child: OutlinedButton.icon(
+            onPressed: () async {
+              final picked = await showAppEmojiPickerSheet(
+                context,
+                presets: _emojiPresets,
+                selected: _emoji,
+              );
+              if (picked != null) setState(() => _emoji = picked);
+            },
+            icon: Text(_emoji.isEmpty ? '🙂' : _emoji),
+            label: const Text('이모지 선택'),
+          ),
         ),
       ],
     );

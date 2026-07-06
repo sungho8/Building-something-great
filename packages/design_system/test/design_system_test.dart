@@ -184,4 +184,71 @@ void main() {
     expect(find.text('B'), findsOneWidget);
     expect(find.text('C'), findsOneWidget);
   });
+
+  testWidgets('showAppEmojiPickerSheet 프리셋 선택 시 그 값을 반환한다', (tester) async {
+    String? result;
+    await tester.pumpWidget(
+      AppFactory(
+        brand: const BrandConfig(seed: Color(0xFF2E6BFF)),
+        home: Builder(
+          builder: (context) => Scaffold(
+            body: Center(
+              child: AppButton(
+                label: '열기',
+                onPressed: () async {
+                  result = await showAppEmojiPickerSheet(
+                    context,
+                    presets: const ['🎉', '📌'],
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('열기'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('📌'));
+    await tester.pump();
+    await tester.tap(find.text('선택 완료'));
+    await tester.pumpAndSettle();
+
+    expect(result, '📌');
+  });
+
+  testWidgets('showAppColorPickerSheet 프리셋 선택 시 그 색을 반환한다', (tester) async {
+    Color? result;
+    const preset = Color(0xFF3182F6);
+    await tester.pumpWidget(
+      AppFactory(
+        brand: const BrandConfig(seed: Color(0xFF2E6BFF)),
+        home: Builder(
+          builder: (context) => Scaffold(
+            body: Center(
+              child: AppButton(
+                label: '열기',
+                onPressed: () async {
+                  result = await showAppColorPickerSheet(
+                    context,
+                    presets: const [preset, Color(0xFFF04452)],
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('열기'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(AppColorSwatch).first);
+    await tester.pump();
+    await tester.tap(find.text('선택 완료'));
+    await tester.pumpAndSettle();
+
+    expect(result, preset);
+  });
 }
