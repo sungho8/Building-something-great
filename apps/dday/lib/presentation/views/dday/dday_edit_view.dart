@@ -193,7 +193,6 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
                   value: _repeatYearly,
                   onChanged: (v) => setState(() => _repeatYearly = v),
                   title: const Text('매년 반복'),
-                  subtitle: const Text('생일·기념일 — 지나면 자동으로 다음 해로'),
                 ),
                 const Divider(height: 1),
                 SwitchListTile(
@@ -201,7 +200,6 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
                   value: _includeStartDay,
                   onChanged: (v) => setState(() => _includeStartDay = v),
                   title: const Text('시작일 포함'),
-                  subtitle: const Text('지난 날을 셀 때 당일을 1일로 (만난 날 = 1일)'),
                 ),
                 const Divider(height: 1),
                 SwitchListTile(
@@ -209,7 +207,6 @@ class _DDayEditViewState extends ConsumerState<DDayEditView> {
                   value: _pinned,
                   onChanged: (v) => setState(() => _pinned = v),
                   title: const Text('고정'),
-                  subtitle: const Text('목록 맨 위 · 홈 위젯에 고정'),
                 ),
               ],
             ),
