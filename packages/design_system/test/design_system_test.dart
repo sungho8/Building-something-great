@@ -14,6 +14,16 @@ void main() {
     expect(theme.colorScheme.brightness, Brightness.light);
   });
 
+  test('라이트 모드는 surfaceTint를 꺼서 다이얼로그·달력이 흐려지지 않는다', () {
+    final theme = buildTheme(
+      const BrandConfig(seed: Color(0xFFFF7AA2)),
+      Brightness.light,
+    );
+
+    expect(theme.colorScheme.surfaceTint, Colors.transparent);
+    expect(theme.datePickerTheme?.backgroundColor, AppCommon.white);
+  });
+
   test('buildTheme의 기본 폰트가 패키지 네임스페이스 접두사를 포함한다', () {
     // packages/design_system/ 접두사가 없으면 FontManifest의 등록 키와 어긋나
     // 조용히 시스템 폰트로 폴백된다 (에러 없음) — 회귀 방지용 테스트.

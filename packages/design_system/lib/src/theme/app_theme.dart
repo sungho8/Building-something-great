@@ -35,6 +35,10 @@ ThemeData buildTheme(BrandConfig brand, Brightness brightness) {
           surfaceContainerLowest: AppCommon.white,
           surfaceContainerLow: AppGrey.s50,
           surfaceContainer: AppSemantic.bgSecondary,
+          // M3는 elevation이 있는 표면(다이얼로그·바텀시트·메뉴·달력 등)에
+          // primary를 옅게 씌워 톤을 흐린다(surfaceTint). 우리 규칙(흰 배경 +
+          // 위젯이 명시적으로만 KeyColor를 짊어짐)과 어긋나므로 꺼둔다.
+          surfaceTint: Colors.transparent,
         )
       : brandScheme;
 
@@ -124,6 +128,41 @@ ThemeData buildTheme(BrandConfig brand, Brightness brightness) {
       }),
       overlayColor: WidgetStatePropertyAll(scheme.primary.withValues(alpha: 0.08)),
     ),
+    // 흰 배경 + 선택된 날짜만 KeyColor로 강조 (앱 전체 톤과 통일).
+    datePickerTheme: isLight
+        ? DatePickerThemeData(
+            backgroundColor: AppCommon.white,
+            headerBackgroundColor: AppCommon.white,
+            headerForegroundColor: AppSemantic.textPrimary,
+            weekdayStyle: AppTypography.caption1
+                .copyWith(color: AppSemantic.textTertiary),
+            dayForegroundColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.selected)) return AppCommon.white;
+              return AppSemantic.textPrimary;
+            }),
+            dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.selected)) return scheme.primary;
+              return Colors.transparent;
+            }),
+            todayForegroundColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.selected)) return AppCommon.white;
+              return scheme.primary;
+            }),
+            todayBorder: BorderSide(color: scheme.primary),
+            yearForegroundColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.selected)) return AppCommon.white;
+              return AppSemantic.textPrimary;
+            }),
+            yearBackgroundColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.selected)) return scheme.primary;
+              return Colors.transparent;
+            }),
+            rangePickerBackgroundColor: AppCommon.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(brand.radius + 8),
+            ),
+          )
+        : null,
     inputDecorationTheme: isLight
         ? InputDecorationTheme(
             filled: true,
