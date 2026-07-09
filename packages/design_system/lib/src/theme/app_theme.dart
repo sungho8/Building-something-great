@@ -107,6 +107,23 @@ ThemeData buildTheme(BrandConfig brand, Brightness brightness) {
         color: isLight ? AppSemantic.textTertiary : scheme.onSurfaceVariant,
       ),
     ),
+    // 꺼짐: 흰 트랙 + 회색 테두리·손잡이 / 켜짐: KeyColor 트랙 + 흰 손잡이.
+    switchTheme: SwitchThemeData(
+      trackColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) return scheme.primary;
+        return isLight ? AppCommon.white : AppGrey.s700;
+      }),
+      trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) return Colors.transparent;
+        return AppSemantic.border;
+      }),
+      trackOutlineWidth: const WidgetStatePropertyAll(1.5),
+      thumbColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) return AppCommon.white;
+        return AppGrey.s400;
+      }),
+      overlayColor: WidgetStatePropertyAll(scheme.primary.withValues(alpha: 0.08)),
+    ),
     inputDecorationTheme: isLight
         ? InputDecorationTheme(
             filled: true,

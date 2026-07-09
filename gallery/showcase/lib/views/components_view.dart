@@ -311,7 +311,8 @@ class ComponentsView extends StatelessWidget {
 
         const SizedBox(height: AppSpacing.s32),
 
-        const Text('AppCheckbox · AppRadioGroup', style: AppTypography.heading1),
+        const Text('AppCheckbox · AppRadioGroup · Switch',
+            style: AppTypography.heading1),
 
         const SizedBox(height: AppSpacing.s12),
 
@@ -407,6 +408,10 @@ class _SelectionDemoState extends State<_SelectionDemo> {
   // 체크 여부
   bool _checked = true;
 
+  // 스위치 on/off (테마의 SwitchThemeData 확인용)
+  bool _switchOn = false;
+  bool _switchOn2 = true;
+
   // 라디오 선택값
   String _radio = 'onday';
 
@@ -419,6 +424,21 @@ class _SelectionDemoState extends State<_SelectionDemo> {
           value: _checked,
           label: '약관에 동의합니다',
           onChanged: (v) => setState(() => _checked = v),
+        ),
+
+        const SizedBox(height: AppSpacing.s4),
+
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          value: _switchOn,
+          onChanged: (v) => setState(() => _switchOn = v),
+          title: const Text('꺼짐 — 흰 배경 + 회색'),
+        ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          value: _switchOn2,
+          onChanged: (v) => setState(() => _switchOn2 = v),
+          title: const Text('켜짐 — KeyColor'),
         ),
 
         const SizedBox(height: AppSpacing.s8),
