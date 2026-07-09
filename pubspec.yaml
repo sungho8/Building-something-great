@@ -9,6 +9,7 @@ environment:
 workspace:
   - packages/design_system
   - packages/core
+  - packages/ads
   - apps/dday
   - gallery/showcase
 

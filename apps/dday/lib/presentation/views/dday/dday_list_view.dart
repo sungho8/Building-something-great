@@ -1,3 +1,4 @@
+import 'package:ads/ads.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,6 +36,7 @@ class _DDayListViewState extends ConsumerState<DDayListView> {
 
     return AppScaffold(
       appBar: AppBar(title: const Text('D-Day')),
+      bottomNavigationBar: const SafeArea(child: AppBannerAd()),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _openEdit(context),
         icon: const Icon(Icons.add),
