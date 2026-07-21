@@ -19,19 +19,28 @@
 - [x] 고정(pin): 목록 맨 위 + 홈 위젯 우선
 - [x] 재부팅 알림 복원 (Android BOOT_COMPLETED 리시버 + 권한)
 
-## Phase 3 — 출시 준비 & 계정 (예정)
+## Phase 3 — 출시 준비 & 계정 (진행 중)
 
-핵심 목표: 로컬 전용 유지하되, **선택적 클라우드 백업/동기화**를 유료 훅으로.
+핵심 목표: 로컬 전용 유지하되, **선택적 클라우드 백업/복원**.
+공용 인프라는 옵트인 패키지로: `packages/ads`(AdMob), `packages/backend`(Firebase).
 
-- [ ] **게스트 모드 우선**: 로그인 없이 바로 사용 (현재 동작 유지가 기본값)
-- [ ] **소셜 로그인**: Google / Apple (iOS 필수), 선택적
-- [ ] **Firebase 연동**:
-  - Auth (익명 → 소셜 연결 업그레이드 경로)
-  - Firestore/Storage로 D-Day 백업·기기 간 동기화 (유료 기능 후보)
-  - 무료 티어 유지 관점에서 사용량 주의
+- [x] **AdMob**: `packages/ads`(초기화·UMP 동의·배너) + dday 하단 배너, 테스트 ID로 빌드 검증
+- [x] **Firebase 연동 코드**: `packages/backend`(AuthService·CloudSyncService) + dday 배선
+  - [x] 게스트(익명) 로그인 + 시작 시 복원 + 저장 시 자동 백업
+  - [x] Google 로그인 코드(익명→Google 승격 포함) — 콘솔에서 Google 켜기 + web 클라이언트 ID 주입 남음
+  - [x] 유저당 단일 문서 모델(비용 최소화), 계정 시트 UI
+  - [ ] 콘솔 설정 마무리(익명·Google 켜기, Firestore 규칙, SHA-1, 예산알림) → `docs/FIREBASE_SETUP.md`
+  - [ ] 실기기에서 로그인·Firestore 왕복 검증
+- [ ] Apple 로그인 (iOS 출시 시)
 - [ ] 앱 아이콘 / 스플래시
-- [ ] AdMob (수익화)
+- [ ] AdMob 실계정 ID로 교체 (출시 시)
 - [ ] 스토어 등록·심사 (Android 먼저 → iOS)
+
+### 비용 검토 결론 (2026-07-21)
+- 단일 문서/유저 + 보안규칙 + App Check + 예산알림 → **수천 DAU까지 사실상 $0**, 이상도 월 몇 달러.
+- Auth(Google/익명) 무료, Firestore 무료 한도(읽기 5만·쓰기 2만/일·저장 1GB)가 프로젝트마다 별도.
+- 진짜 리스크는 요금이 아니라 폭주 → Blaze + 예산알림 + App Check로 방어.
+- 플랜: **Blaze + 예산알림** 채택.
 
 ### 설계 메모 (Phase 3)
 - 게스트 우선 + 익명 Auth로 시작해, 사용자가 원할 때 소셜 계정으로 **업그레이드**(익명 계정 연결)하는 흐름이 이탈을 줄인다.

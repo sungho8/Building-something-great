@@ -10,6 +10,7 @@ workspace:
   - packages/design_system
   - packages/core
   - packages/ads
+  - packages/backend
   - apps/dday
   - gallery/showcase
 

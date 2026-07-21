@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "751272444090",
+    "project_id": "d-day-273b7",
+    "storage_bucket": "d-day-273b7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:751272444090:android:58b94d784eb2391d0a0283",
+        "android_client_info": {
+          "package_name": "com.sungho.dday"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYa-WIZuKyNEUzeuRP24S_TGEWfxH9LEQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

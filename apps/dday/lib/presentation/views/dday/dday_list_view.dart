@@ -8,6 +8,7 @@ import '../../../di/dday_providers.dart';
 import '../../../domain/entities/dday_item.dart';
 import '../../widgets/dday_card.dart';
 import '../../widgets/dday_hero_card.dart';
+import 'account_sheet.dart';
 import 'dday_edit_view.dart';
 
 /// 목록 필터.
@@ -35,7 +36,15 @@ class _DDayListViewState extends ConsumerState<DDayListView> {
     };
 
     return AppScaffold(
-      appBar: AppBar(title: const Text('D-Day')),
+      appBar: AppBar(
+        title: const Text('D-Day'),
+        actions: [
+          IconButton(
+            onPressed: () => showAccountSheet(context),
+            icon: const Icon(Icons.account_circle_outlined),
+          ),
+        ],
+      ),
       bottomNavigationBar: const SafeArea(child: AppBannerAd()),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _openEdit(context),

@@ -27,4 +27,10 @@ class DDayRepositoryImpl implements DDayRepository {
     final encoded = jsonEncode(items.map((e) => e.toJson()).toList());
     await _store.setString(_key, encoded);
   }
+
+  @override
+  String? exportRaw() => _store.getString(_key);
+
+  @override
+  Future<void> importRaw(String json) => _store.setString(_key, json);
 }

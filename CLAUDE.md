@@ -23,7 +23,9 @@
 app_factory/
 ├── packages/
 │   ├── design_system/   ← 브랜드 무지한 공용 위젯·토큰 (BrandConfig 주입)
-│   └── core/            ← 저장·알림·(예정)광고·분석 공용 인프라
+│   ├── core/            ← 저장·알림 공용 인프라 (모든 앱)
+│   ├── ads/             ← AdMob (옵트인, Firebase 불필요)
+│   └── backend/         ← Firebase 인증(게스트·Google)+Firestore 동기화 (옵트인)
 ├── apps/
 │   ├── dday/            ← 경량 3계층 (domain/data/presentation) + Riverpod
 │   └── subscription/
