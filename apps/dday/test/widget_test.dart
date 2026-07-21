@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
 import 'package:dday/di/dday_providers.dart';
+import 'package:dday/presentation/views/auth/login_view.dart';
 import 'package:dday/presentation/views/dday/dday_list_view.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
@@ -24,5 +25,23 @@ void main() {
 
     expect(find.text('추가'), findsOneWidget);
     expect(find.text('등록된 D-Day가 없어요'), findsOneWidget);
+  });
+
+  testWidgets('로그인 화면에 Google·게스트 버튼이 보인다', (tester) async {
+    SharedPreferences.setMockInitialValues({});
+    final store = await LocalStore.create();
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [localStoreProvider.overrideWithValue(store)],
+        child: const AppFactory(
+          brand: BrandConfig(seed: Color(0xFFFF7AA2)),
+          home: LoginView(),
+        ),
+      ),
+    );
+
+    expect(find.text('Google로 계속하기'), findsOneWidget);
+    expect(find.text('게스트로 시작하기'), findsOneWidget);
   });
 }

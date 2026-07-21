@@ -101,9 +101,15 @@ class _AccountSheet extends ConsumerWidget {
     }
   }
 
-  // 로그아웃
+  // 로그아웃 → 게스트(익명)로 복귀 (로컬 백업 계속 가능하도록)
   Future<void> _logout(BuildContext context, WidgetRef ref) async {
-    await ref.read(authServiceProvider).signOut();
+    final auth = ref.read(authServiceProvider);
+    await auth.signOut();
+    try {
+      await auth.ensureGuest();
+    } catch (_) {
+      // 익명 미설정·오프라인이면 무시.
+    }
     if (!context.mounted) return;
     Navigator.pop(context);
     showAppSnackBar(context, '로그아웃했어요');

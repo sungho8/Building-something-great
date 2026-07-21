@@ -47,6 +47,24 @@ final authStateProvider = StreamProvider<AppUser?>(
   (ref) => ref.watch(authServiceProvider).authState,
 );
 
+/// 온보딩(로그인 화면) 완료 여부. 첫 실행 때만 로그인 화면을 보여주기 위함.
+final onboardingProvider =
+    NotifierProvider<OnboardingController, bool>(OnboardingController.new);
+
+/// 온보딩 완료 여부를 로컬에 영속화.
+class OnboardingController extends Notifier<bool> {
+  static const _key = 'onboarded';
+
+  @override
+  bool build() => ref.read(localStoreProvider).getString(_key) == 'true';
+
+  /// 로그인 화면을 통과 처리(게스트 시작 또는 로그인 성공 후).
+  Future<void> complete() async {
+    await ref.read(localStoreProvider).setString(_key, 'true');
+    state = true;
+  }
+}
+
 /// D-Day 목록 상태.
 final ddayListProvider =
     NotifierProvider<DDayListViewModel, List<DDayItem>>(DDayListViewModel.new);
