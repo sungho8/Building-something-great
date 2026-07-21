@@ -93,28 +93,19 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
             const Spacer(flex: 3),
 
-            if (_loading)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: AppSpacing.s12),
-                child: AppLoading(),
-              )
-            else ...[
-              AppButton(
-                label: 'Google로 계속하기',
-                leadingIcon: Icons.login,
-                expand: true,
-                onPressed: _google,
-              ),
+            GoogleSignInButton(
+              loading: _loading,
+              onPressed: _google,
+            ),
 
-              const SizedBox(height: AppSpacing.s8),
+            const SizedBox(height: AppSpacing.s8),
 
-              AppButton(
-                label: '게스트로 시작하기',
-                variant: AppButtonVariant.tertiary,
-                expand: true,
-                onPressed: _guest,
-              ),
-            ],
+            AppButton(
+              label: '게스트로 시작하기',
+              variant: AppButtonVariant.tertiary,
+              expand: true,
+              onPressed: _loading ? null : _guest,
+            ),
 
             const SizedBox(height: AppSpacing.s16),
 

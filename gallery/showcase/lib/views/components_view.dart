@@ -84,6 +84,18 @@ class ComponentsView extends StatelessWidget {
 
         const SizedBox(height: AppSpacing.s32),
 
+        const Text('GoogleSignInButton', style: AppTypography.heading1),
+
+        const SizedBox(height: AppSpacing.s12),
+
+        GoogleSignInButton(onPressed: () {}),
+
+        const SizedBox(height: AppSpacing.s8),
+
+        const GoogleSignInButton(loading: true),
+
+        const SizedBox(height: AppSpacing.s32),
+
         const Text('AppCard', style: AppTypography.heading1),
 
         const SizedBox(height: AppSpacing.s12),

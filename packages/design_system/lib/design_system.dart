@@ -26,6 +26,7 @@ export 'src/components/app_segmented_control.dart';
 export 'src/components/app_snack_bar.dart';
 export 'src/components/app_text_field.dart';
 export 'src/components/fade_slide_in.dart';
+export 'src/components/google_sign_in_button.dart';
 export 'src/theme/app_theme.dart';
 export 'src/theme/brand_config.dart';
 export 'src/tokens/colors.dart';
