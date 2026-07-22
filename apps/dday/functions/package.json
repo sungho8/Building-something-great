@@ -2,7 +2,7 @@
   "name": "functions",
   "description": "카카오 로그인 커스텀 토큰 교환 (Firebase Cloud Functions)",
   "engines": {
-    "node": "20"
+    "node": "22"
   },
   "main": "index.js",
   "scripts": {
