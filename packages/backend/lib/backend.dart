@@ -7,3 +7,4 @@ library;
 export 'src/app_user.dart';
 export 'src/auth_service.dart';
 export 'src/cloud_sync_service.dart';
+export 'src/kakao.dart';

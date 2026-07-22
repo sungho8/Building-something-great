@@ -36,7 +36,7 @@ class _AccountSheet extends ConsumerWidget {
                 children: [
                   Text(
                     signedIn
-                        ? (user.displayName ?? 'Google 계정')
+                        ? (user.displayName ?? '카카오 계정')
                         : '게스트로 사용 중',
                     style: AppTypography.itemTitle,
                   ),
@@ -56,12 +56,7 @@ class _AccountSheet extends ConsumerWidget {
         const SizedBox(height: AppSpacing.s24),
 
         if (!signedIn)
-          AppButton(
-            label: 'Google로 로그인',
-            leadingIcon: Icons.login,
-            expand: true,
-            onPressed: () => _google(context, ref),
-          )
+          KakaoLoginButton(onPressed: () => _kakao(context, ref))
         else
           AppButton(
             label: '로그아웃',
@@ -82,20 +77,20 @@ class _AccountSheet extends ConsumerWidget {
     );
   }
 
-  // Google 로그인 (게스트면 계정 승격)
-  Future<void> _google(BuildContext context, WidgetRef ref) async {
+  // 카카오 로그인 (로컬 데이터를 클라우드에 백업)
+  Future<void> _kakao(BuildContext context, WidgetRef ref) async {
     try {
-      await ref.read(authServiceProvider).signInWithGoogle();
+      await ref.read(authServiceProvider).signInWithKakao();
       await ref.read(ddayListProvider.notifier).backupNow();
       if (!context.mounted) return;
       Navigator.pop(context);
-      showAppSnackBar(context, 'Google 계정으로 로그인했어요',
+      showAppSnackBar(context, '카카오 계정으로 로그인했어요',
           variant: AppSnackBarVariant.success);
     } catch (_) {
       if (!context.mounted) return;
       showAppSnackBar(
         context,
-        'Google 로그인에 실패했어요 (콘솔 설정을 확인해주세요)',
+        '카카오 로그인에 실패했어요 (설정을 확인해주세요)',
         variant: AppSnackBarVariant.error,
       );
     }

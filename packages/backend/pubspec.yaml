@@ -1,5 +1,5 @@
 name: backend
-description: "공용 백엔드 인프라 — Firebase 인증(게스트·Google) + Firestore 동기화. (옵트인)"
+description: "공용 백엔드 인프라 — Firebase 인증(게스트·Kakao) + Firestore 동기화. (옵트인)"
 version: 0.0.1
 publish_to: none
 resolution: workspace
@@ -14,7 +14,9 @@ dependencies:
   firebase_core: ^4.11.0
   firebase_auth: ^6.5.4
   cloud_firestore: ^6.6.0
-  google_sign_in: ^7.2.0
+  kakao_flutter_sdk_user: ^2.0.0
+  kakao_flutter_sdk_common: ^2.0.0
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:

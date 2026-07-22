@@ -1,24 +1,24 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 import 'app_user.dart';
 
-/// 인증 서비스 — 게스트(익명) + Google, 그리고 익명→Google 업그레이드(연결).
+/// 인증 서비스 — 게스트(익명) + Kakao.
 ///
-/// 사용 흐름: 앱 시작 시 [ensureGuest]로 익명 로그인 → 원하면 [signInWithGoogle]로
-/// 같은 uid를 유지한 채 Google 계정으로 승격.
+/// Kakao는 Firebase 기본 provider가 아니라, 카카오 토큰을 **커스텀 토큰 서버**
+/// (Cloud Function)로 보내 Firebase 커스텀 토큰을 받아 로그인한다.
+/// [authFunctionUrl]에 그 함수 URL을 넣어야 Kakao 로그인이 동작한다.
 class AuthService {
-  AuthService({FirebaseAuth? auth, this.googleServerClientId})
+  AuthService({FirebaseAuth? auth, this.authFunctionUrl})
       : _auth = auth ?? FirebaseAuth.instance;
 
   final FirebaseAuth _auth;
 
-  /// Google idToken 발급에 필요한 web(서버) OAuth 클라이언트 ID.
-  /// Android에서 idToken을 받으려면 반드시 필요하다. Firebase 콘솔에서 Google
-  /// 로그인을 켜면 생성되는 "웹 클라이언트 ID"를 넣는다.
-  final String? googleServerClientId;
-
-  bool _googleInitialized = false;
+  /// 카카오 access token → Firebase 커스텀 토큰 교환 Cloud Function URL.
+  final String? authFunctionUrl;
 
   /// 로그인 상태 스트림.
   Stream<AppUser?> get authState => _auth.authStateChanges().map(
@@ -39,54 +39,47 @@ class AuthService {
     return AppUser.fromFirebase(result.user!);
   }
 
-  /// Google 로그인. 현재 게스트(익명)면 같은 uid로 연결(업그레이드)한다.
-  Future<AppUser> signInWithGoogle() async {
-    if (!_googleInitialized) {
-      await GoogleSignIn.instance.initialize(
-        serverClientId: googleServerClientId,
-      );
-      _googleInitialized = true;
-    }
-
-    final account = await GoogleSignIn.instance.authenticate();
-    final idToken = account.authentication.idToken;
-    if (idToken == null) {
+  /// Kakao 로그인.
+  ///
+  /// 카카오톡 앱이 있으면 앱으로, 없으면 카카오계정 웹으로 로그인한 뒤,
+  /// 발급받은 access token을 커스텀 토큰 서버에 보내 Firebase에 로그인한다.
+  Future<AppUser> signInWithKakao() async {
+    final url = authFunctionUrl;
+    if (url == null || url.isEmpty) {
       throw StateError(
-        'Google idToken이 null입니다. Firebase 콘솔에서 Google 로그인을 켜고 '
-        'web 클라이언트 ID(googleServerClientId)를 전달했는지 확인하세요.',
+        'authFunctionUrl 미설정 — 카카오 토큰을 교환할 Cloud Function URL이 필요합니다.',
       );
     }
 
-    final credential = GoogleAuthProvider.credential(idToken: idToken);
-    final current = _auth.currentUser;
+    // 1. 카카오 로그인 → access token
+    final OAuthToken token = await isKakaoTalkInstalled()
+        ? await UserApi.instance.loginWithKakaoTalk()
+        : await UserApi.instance.loginWithKakaoAccount();
 
-    UserCredential result;
-    if (current != null && current.isAnonymous) {
-      // 익명 계정을 Google로 승격(연결).
-      try {
-        result = await current.linkWithCredential(credential);
-      } on FirebaseAuthException catch (e) {
-        // 이미 그 Google로 만든 계정이 있으면 그 계정으로 로그인.
-        if (e.code == 'credential-already-in-use' ||
-            e.code == 'email-already-in-use') {
-          result = await _auth.signInWithCredential(credential);
-        } else {
-          rethrow;
-        }
-      }
-    } else {
-      result = await _auth.signInWithCredential(credential);
+    // 2. 커스텀 토큰 서버에서 Firebase 토큰 교환
+    final response = await http.post(
+      Uri.parse(url),
+      headers: const {'Content-Type': 'application/json'},
+      body: jsonEncode({'accessToken': token.accessToken}),
+    );
+    if (response.statusCode != 200) {
+      throw StateError('커스텀 토큰 교환 실패: ${response.statusCode} ${response.body}');
     }
+    final firebaseToken =
+        (jsonDecode(response.body) as Map<String, dynamic>)['firebaseToken']
+            as String;
 
+    // 3. Firebase 커스텀 토큰으로 로그인
+    final result = await _auth.signInWithCustomToken(firebaseToken);
     return AppUser.fromFirebase(result.user!);
   }
 
-  /// 로그아웃 (Google 세션도 함께 정리).
+  /// 로그아웃 (카카오 세션도 함께 정리).
   Future<void> signOut() async {
     try {
-      await GoogleSignIn.instance.signOut();
+      await UserApi.instance.logout();
     } catch (_) {
-      // Google 미초기화 등은 무시.
+      // 카카오 미로그인 등은 무시.
     }
     await _auth.signOut();
   }

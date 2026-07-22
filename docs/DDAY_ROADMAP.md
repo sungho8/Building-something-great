@@ -27,7 +27,7 @@
 - [x] **AdMob**: `packages/ads`(초기화·UMP 동의·배너) + dday 하단 배너, 테스트 ID로 빌드 검증
 - [x] **Firebase 연동 코드**: `packages/backend`(AuthService·CloudSyncService) + dday 배선
   - [x] 게스트(익명) 로그인 + 시작 시 복원 + 저장 시 자동 백업
-  - [x] Google 로그인 코드(익명→Google 승격 포함) — 콘솔에서 Google 켜기 + web 클라이언트 ID 주입 남음
+  - [x] 카카오 로그인 코드 (점유율 고려해 Google→Kakao 확정, 2026-07-21) — 커스텀 토큰 서버(Cloud Function) 경유. 콘솔·함수배포·네이티브 설정 남음 → `docs/KAKAO_SETUP.md`
   - [x] 유저당 단일 문서 모델(비용 최소화), 계정 시트 UI
   - [ ] 콘솔 설정 마무리(익명·Google 켜기, Firestore 규칙, SHA-1, 예산알림) → `docs/FIREBASE_SETUP.md`
   - [ ] 실기기에서 로그인·Firestore 왕복 검증

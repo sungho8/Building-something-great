@@ -17,6 +17,7 @@ Future<void> main() async {
   final notifications = await NotificationService.create();
   await notifications.requestPermissions();
   await AdsService.initialize();
+  initKakao(dDayKakaoNativeAppKey);
 
   // Firebase: 게스트 로그인 + (로컬이 비어 있으면) 클라우드 복원.
   // 콘솔 미설정·오프라인 등 어떤 실패에도 앱은 로컬로 계속 동작한다.

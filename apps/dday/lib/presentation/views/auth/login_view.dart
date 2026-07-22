@@ -20,18 +20,18 @@ class _LoginViewState extends ConsumerState<LoginView> {
   // Google 로그인 진행 중 여부
   bool _loading = false;
 
-  // Google 로그인 → 성공 시 로컬 백업 + 온보딩 완료
-  Future<void> _google() async {
+  // 카카오 로그인 → 성공 시 로컬 백업 + 온보딩 완료
+  Future<void> _kakao() async {
     setState(() => _loading = true);
     try {
-      await ref.read(authServiceProvider).signInWithGoogle();
+      await ref.read(authServiceProvider).signInWithKakao();
       await ref.read(ddayListProvider.notifier).backupNow();
       await ref.read(onboardingProvider.notifier).complete();
     } catch (_) {
       if (!mounted) return;
       showAppSnackBar(
         context,
-        'Google 로그인에 실패했어요. 게스트로 시작할 수 있어요.',
+        '카카오 로그인에 실패했어요. 게스트로 시작할 수 있어요.',
         variant: AppSnackBarVariant.error,
       );
     } finally {
@@ -93,9 +93,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
             const Spacer(flex: 3),
 
-            GoogleSignInButton(
+            KakaoLoginButton(
               loading: _loading,
-              onPressed: _google,
+              onPressed: _kakao,
             ),
 
             const SizedBox(height: AppSpacing.s8),

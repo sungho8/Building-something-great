@@ -84,15 +84,15 @@ class ComponentsView extends StatelessWidget {
 
         const SizedBox(height: AppSpacing.s32),
 
-        const Text('GoogleSignInButton', style: AppTypography.heading1),
+        const Text('KakaoLoginButton', style: AppTypography.heading1),
 
         const SizedBox(height: AppSpacing.s12),
 
-        GoogleSignInButton(onPressed: () {}),
+        KakaoLoginButton(onPressed: () {}),
 
         const SizedBox(height: AppSpacing.s8),
 
-        const GoogleSignInButton(loading: true),
+        const KakaoLoginButton(loading: true),
 
         const SizedBox(height: AppSpacing.s32),
 

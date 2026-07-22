@@ -27,7 +27,7 @@ void main() {
     expect(find.text('등록된 D-Day가 없어요'), findsOneWidget);
   });
 
-  testWidgets('로그인 화면에 Google·게스트 버튼이 보인다', (tester) async {
+  testWidgets('로그인 화면에 카카오·게스트 버튼이 보인다', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.create();
 
@@ -41,7 +41,7 @@ void main() {
       ),
     );
 
-    expect(find.text('Google로 계속하기'), findsOneWidget);
+    expect(find.text('카카오 로그인'), findsOneWidget);
     expect(find.text('게스트로 시작하기'), findsOneWidget);
   });
 }
