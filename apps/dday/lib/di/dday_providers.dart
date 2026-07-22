@@ -7,13 +7,14 @@ import '../domain/entities/dday_item.dart';
 import '../domain/repositories/dday_repository.dart';
 import '../presentation/viewmodels/dday_list_viewmodel.dart';
 
-/// 카카오 네이티브 앱 키 (Kakao Developers에서 발급).
+/// 카카오 네이티브 앱 키. `dart_defines.json`(gitignore)에서 주입.
+/// 실행: `flutter run --dart-define-from-file=dart_defines.json`
 /// ⚠️ 비어 있으면 카카오 SDK 초기화를 건너뛴다(게스트·백업은 정상).
-const dDayKakaoNativeAppKey = '';
+const dDayKakaoNativeAppKey = String.fromEnvironment('KAKAO_NATIVE_APP_KEY');
 
-/// 카카오 access token → Firebase 커스텀 토큰 교환 Cloud Function URL.
+/// 카카오 토큰 → Firebase 커스텀 토큰 교환 Cloud Function URL. dart_defines.json에서 주입.
 /// ⚠️ 함수 배포 후 채운다. 비어 있으면 카카오 로그인만 비활성.
-const dDayAuthFunctionUrl = '';
+const dDayAuthFunctionUrl = String.fromEnvironment('AUTH_FUNCTION_URL');
 
 /// main에서 초기화 인스턴스로 override.
 final localStoreProvider = Provider<LocalStore>(

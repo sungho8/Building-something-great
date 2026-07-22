@@ -83,7 +83,8 @@ app_factory/
 - 의존성 일괄: `melos bootstrap` (또는 루트 `flutter pub get`)
 - 분석/테스트: `melos run analyze` / `melos run test --no-select`
 - 코드 생성(freezed): `melos run gen`
-- dday 실행: `cd apps/dday && flutter run`
+- dday 실행: `cd apps/dday && flutter run --dart-define-from-file=dart_defines.json`
+  (카카오 키·함수 URL은 `dart_defines.json`(gitignore)에서 주입. `dart_defines.example.json` 참고. Android 매니페스트도 이 파일에서 키를 읽음)
 - 쇼케이스 실행: `cd gallery/showcase && flutter run` (크롬: `-d chrome`)
 
 ## 도구

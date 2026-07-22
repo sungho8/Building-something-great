@@ -43,3 +43,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# 로컬 환경 설정 (카카오 키·함수 URL 등) — 커밋 금지, example만 커밋
+/dart_defines.json

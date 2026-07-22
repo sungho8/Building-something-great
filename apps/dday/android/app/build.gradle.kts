@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 plugins {
     id("com.android.application")
     // START: FlutterFire Configuration
@@ -6,6 +8,15 @@ plugins {
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+}
+
+// dart_defines.json(gitignore)에서 카카오 네이티브 앱 키를 읽는다. 없으면 빈 값.
+val kakaoNativeAppKey: String = run {
+    val f = file("../../dart_defines.json")
+    if (!f.exists()) return@run ""
+    @Suppress("UNCHECKED_CAST")
+    val json = JsonSlurper().parse(f) as Map<String, Any?>
+    (json["KAKAO_NATIVE_APP_KEY"] as? String).orEmpty()
 }
 
 android {
@@ -33,6 +44,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        // 카카오 로그인 리다이렉트 스킴(kakao{키})용 매니페스트 치환자
+        manifestPlaceholders["kakaoNativeAppKey"] = kakaoNativeAppKey
     }
 
     buildTypes {
