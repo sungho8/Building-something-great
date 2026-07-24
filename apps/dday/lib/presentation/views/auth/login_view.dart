@@ -27,7 +27,10 @@ class _LoginViewState extends ConsumerState<LoginView> {
       await ref.read(authServiceProvider).signInWithKakao();
       await ref.read(ddayListProvider.notifier).backupNow();
       await ref.read(onboardingProvider.notifier).complete();
-    } catch (_) {
+    } catch (e, st) {
+      // 원인 파악을 위해 실제 예외를 남긴다 (삼키지 않는다).
+      debugPrint('[카카오로그인실패] $e');
+      debugPrintStack(stackTrace: st);
       if (!mounted) return;
       showAppSnackBar(
         context,

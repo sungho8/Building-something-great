@@ -86,7 +86,10 @@ class _AccountSheet extends ConsumerWidget {
       Navigator.pop(context);
       showAppSnackBar(context, '카카오 계정으로 로그인했어요',
           variant: AppSnackBarVariant.success);
-    } catch (_) {
+    } catch (e, st) {
+      // 원인 파악을 위해 실제 예외를 남긴다 (삼키지 않는다).
+      debugPrint('[카카오로그인실패] $e');
+      debugPrintStack(stackTrace: st);
       if (!context.mounted) return;
       showAppSnackBar(
         context,
