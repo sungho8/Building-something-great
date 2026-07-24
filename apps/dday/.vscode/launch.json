@@ -1,0 +1,33 @@
+{
+  // apps/dday를 VSCode workspace로 열었을 때의 실행 설정.
+  // (모노레포 루트를 열었을 땐 루트의 .vscode/launch.json이 쓰인다)
+  //
+  // ⚠️ dart_defines.json(카카오 네이티브 키·함수 URL) 주입이 필수.
+  //    없이 실행하면 카카오 SDK 초기화가 스킵되고 로그인이 실패한다.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "dday",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "toolArgs": ["--dart-define-from-file=dart_defines.json"]
+    },
+    {
+      "name": "dday (profile mode)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "flutterMode": "profile",
+      "toolArgs": ["--dart-define-from-file=dart_defines.json"]
+    },
+    {
+      "name": "dday (release mode)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "flutterMode": "release",
+      "toolArgs": ["--dart-define-from-file=dart_defines.json"]
+    }
+  ]
+}

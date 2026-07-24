@@ -1,0 +1,4 @@
+{
+  // 모노레포 루트의 FVM SDK(3.41.7)를 쓴다. homebrew flutter(3.38)와 섞이면 빌드가 깨진다.
+  "dart.flutterSdkPath": "../../.fvm/versions/3.41.7"
+}
