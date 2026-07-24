@@ -12,7 +12,10 @@ pubspec.lock
 # IDE
 .idea/
 *.iml
-.vscode/
+# .vscode는 실행 설정(launch)·SDK 경로를 기기 간 공유하기 위해 일부만 커밋
+.vscode/*
+!.vscode/launch.json
+!.vscode/settings.json
 
 # macOS
 .DS_Store

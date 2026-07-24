@@ -85,6 +85,8 @@ app_factory/
 - 코드 생성(freezed): `melos run gen`
 - dday 실행: `cd apps/dday && flutter run --dart-define-from-file=dart_defines.json`
   (카카오 키·함수 URL은 `dart_defines.json`(gitignore)에서 주입. `dart_defines.example.json` 참고. Android 매니페스트도 이 파일에서 키를 읽음)
+- **VSCode Debug 탭**: `.vscode/launch.json`의 `dday` 선택 (dart-define 자동 주입됨).
+  ⚠️ dart-define 없이 실행하면 카카오 키·함수 URL이 빈 값이라 로그인이 실패한다.
 - 쇼케이스 실행: `cd gallery/showcase && flutter run` (크롬: `-d chrome`)
 
 ## 도구
