@@ -25,7 +25,12 @@ class _LoginViewState extends ConsumerState<LoginView> {
     setState(() => _loading = true);
     try {
       await ref.read(authServiceProvider).signInWithKakao();
-      await ref.read(ddayListProvider.notifier).backupNow();
+      // 백업 실패(Firestore 미설정·오프라인 등)가 로그인 성공을 막지 않게 분리.
+      try {
+        await ref.read(ddayListProvider.notifier).backupNow();
+      } catch (e) {
+        debugPrint('[백업실패] $e');
+      }
       await ref.read(onboardingProvider.notifier).complete();
     } catch (e, st) {
       // 원인 파악을 위해 실제 예외를 남긴다 (삼키지 않는다).
