@@ -4,12 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../di/dday_providers.dart';
 
-/// 계정·백업 시트를 연다.
+/// 계정 시트를 연다.
 Future<void> showAccountSheet(BuildContext context) {
   return showAppBottomSheet(context, title: '계정', child: const _AccountSheet());
 }
 
-/// 계정 상태 + Google 로그인/로그아웃 + 클라우드 복원.
+/// 현재 로그인 상태 표시 + 로그아웃(→ 로그인 화면).
+///
+/// 로그인/복원 같은 동작은 로그인 화면에서만 한다. 여기선 상태 확인과
+/// 로그아웃(로그인 화면으로 복귀)만 담당해 단순하게 유지한다.
 class _AccountSheet extends ConsumerWidget {
   const _AccountSheet();
 
@@ -24,25 +27,19 @@ class _AccountSheet extends ConsumerWidget {
       children: [
         Row(
           children: [
-            AppAvatar(
-              imageUrl: user?.photoUrl,
-              icon: Icons.person,
-              size: 44,
-            ),
+            AppAvatar(imageUrl: user?.photoUrl, icon: Icons.person, size: 44),
             const SizedBox(width: AppSpacing.s12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    signedIn
-                        ? (user.displayName ?? '카카오 계정')
-                        : '게스트로 사용 중',
+                    signedIn ? (user.displayName ?? '카카오 계정') : '게스트로 사용 중',
                     style: AppTypography.itemTitle,
                   ),
                   Text(
                     signedIn
-                        ? (user.email ?? '')
+                        ? (user.email ?? '카카오 계정으로 로그인됨')
                         : '로그인하면 기기 간 백업·복원이 돼요',
                     style: AppTypography.descriptionSub
                         .copyWith(color: AppSemantic.textTertiary),
@@ -55,89 +52,36 @@ class _AccountSheet extends ConsumerWidget {
 
         const SizedBox(height: AppSpacing.s24),
 
-        if (!signedIn)
-          KakaoLoginButton(onPressed: () => _kakao(context, ref))
-        else
+        if (signedIn)
           AppButton(
             label: '로그아웃',
             variant: AppButtonVariant.secondary,
             expand: true,
             onPressed: () => _logout(context, ref),
+          )
+        else
+          AppButton(
+            label: '로그인하기',
+            variant: AppButtonVariant.primary,
+            expand: true,
+            onPressed: () => _toLogin(context, ref),
           ),
-
-        const SizedBox(height: AppSpacing.s8),
-
-        AppButton(
-          label: '클라우드에서 복원',
-          variant: AppButtonVariant.tertiary,
-          expand: true,
-          onPressed: () => _restore(context, ref),
-        ),
       ],
     );
   }
 
-  // 카카오 로그인 (로컬 데이터를 클라우드에 백업)
-  Future<void> _kakao(BuildContext context, WidgetRef ref) async {
-    try {
-      await ref.read(authServiceProvider).signInWithKakao();
-      // 백업 실패(Firestore 미설정·오프라인 등)가 로그인 성공을 막지 않게 분리.
-      try {
-        await ref.read(ddayListProvider.notifier).backupNow();
-      } catch (e) {
-        debugPrint('[백업실패] $e');
-      }
-      if (!context.mounted) return;
-      Navigator.pop(context);
-      showAppSnackBar(context, '카카오 계정으로 로그인했어요',
-          variant: AppSnackBarVariant.success);
-    } catch (e, st) {
-      // 원인 파악을 위해 실제 예외를 남긴다 (삼키지 않는다).
-      debugPrint('[카카오로그인실패] $e');
-      debugPrintStack(stackTrace: st);
-      if (!context.mounted) return;
-      showAppSnackBar(
-        context,
-        '카카오 로그인에 실패했어요 (설정을 확인해주세요)',
-        variant: AppSnackBarVariant.error,
-      );
-    }
-  }
-
-  // 로그아웃 → 게스트(익명)로 복귀 (로컬 백업 계속 가능하도록)
+  // 로그아웃 → 카카오·Firebase 세션 정리 후 로그인 화면으로.
   Future<void> _logout(BuildContext context, WidgetRef ref) async {
-    final auth = ref.read(authServiceProvider);
-    await auth.signOut();
-    try {
-      await auth.ensureGuest();
-    } catch (_) {
-      // 익명 미설정·오프라인이면 무시.
-    }
+    await ref.read(authServiceProvider).signOut();
+    await ref.read(onboardingProvider.notifier).reset();
     if (!context.mounted) return;
     Navigator.pop(context);
-    showAppSnackBar(context, '로그아웃했어요');
   }
 
-  // 클라우드 복원 (로컬 덮어쓰기 확인)
-  Future<void> _restore(BuildContext context, WidgetRef ref) async {
-    final ok = await showAppDialog(
-      context,
-      title: '클라우드에서 복원할까요?',
-      message: '현재 기기의 목록을 클라우드 백업으로 덮어씁니다.',
-      confirmLabel: '복원',
-      cancelLabel: '취소',
-    );
-    if (ok != true) return;
-
-    final restored =
-        await ref.read(ddayListProvider.notifier).restoreFromCloud();
+  // 게스트 → 로그인하러 로그인 화면으로.
+  Future<void> _toLogin(BuildContext context, WidgetRef ref) async {
+    await ref.read(onboardingProvider.notifier).reset();
     if (!context.mounted) return;
     Navigator.pop(context);
-    showAppSnackBar(
-      context,
-      restored ? '클라우드에서 복원했어요' : '복원할 백업이 없어요',
-      variant:
-          restored ? AppSnackBarVariant.success : AppSnackBarVariant.info,
-    );
   }
 }

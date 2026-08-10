@@ -63,6 +63,24 @@ void main() {
     expect(_item(DateTime.now()).color, isNull);
   });
 
+  test('notificationIdFor — 리마인더별로 다르고, 같은 입력엔 안정적', () {
+    final item = _item(DateTime.now());
+    final ids = {
+      for (final r in DdayReminder.values) item.notificationIdFor(r),
+    };
+    // 3개 슬롯이 서로 겹치지 않는다
+    expect(ids.length, DdayReminder.values.length);
+    // 같은 항목·같은 슬롯이면 항상 같은 id
+    expect(
+      item.notificationIdFor(DdayReminder.onDay),
+      item.notificationIdFor(DdayReminder.onDay),
+    );
+    // 32비트 양수 범위
+    for (final id in ids) {
+      expect(id, greaterThanOrEqualTo(0));
+    }
+  });
+
   test('JSON 직렬화 왕복 (확장 필드 포함)', () {
     final item = DDayItem(
       id: 'abc',

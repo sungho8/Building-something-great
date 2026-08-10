@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../config/ad_config.dart';
 import '../../../di/dday_providers.dart';
 import '../../../domain/entities/dday_item.dart';
 import '../../widgets/dday_card.dart';
@@ -45,7 +46,7 @@ class _DDayListViewState extends ConsumerState<DDayListView> {
           ),
         ],
       ),
-      bottomNavigationBar: const SafeArea(child: AppBannerAd()),
+      bottomNavigationBar: SafeArea(child: AppBannerAd(adUnitId: DDayAds.banner)),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _openEdit(context),
         icon: const Icon(Icons.add),

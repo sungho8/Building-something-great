@@ -1,0 +1,25 @@
+rules_version = '2';
+
+// D-Day 백업 규칙.
+// 데이터 모델: 유저별 단일 문서 backups/{uid} = { data: <JSON 문자열>, updatedAt }
+// 원칙: 로그인한 본인(uid)만 자기 문서를 읽고 쓴다. 그 외 전면 차단.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /backups/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+
+      // 쓰기: 본인 + data는 문자열 + 과도한 크기 방지(비용/남용 방어).
+      // Firestore 문서 상한(~1MiB)보다 넉넉히 아래로 제한.
+      allow write: if request.auth != null
+                   && request.auth.uid == uid
+                   && request.resource.data.data is string
+                   && request.resource.data.data.size() < 900000;
+    }
+
+    // 정의되지 않은 모든 경로는 차단 (기본 거부).
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

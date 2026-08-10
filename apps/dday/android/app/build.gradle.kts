@@ -1,4 +1,6 @@
 import groovy.json.JsonSlurper
+import java.util.Properties
+import java.io.FileInputStream
 
 plugins {
     id("com.android.application")
@@ -17,6 +19,12 @@ val kakaoNativeAppKey: String = run {
     @Suppress("UNCHECKED_CAST")
     val json = JsonSlurper().parse(f) as Map<String, Any?>
     (json["KAKAO_NATIVE_APP_KEY"] as? String).orEmpty()
+}
+
+// 릴리스 서명 키: android/key.properties(gitignore)에서 읽는다. 없으면 debug로 폴백.
+val keystorePropertiesFile = rootProject.file("key.properties")
+val keystoreProperties = Properties().apply {
+    if (keystorePropertiesFile.exists()) load(FileInputStream(keystorePropertiesFile))
 }
 
 android {
@@ -49,11 +57,30 @@ android {
         manifestPlaceholders["kakaoNativeAppKey"] = kakaoNativeAppKey
     }
 
+    signingConfigs {
+        create("release") {
+            if (keystorePropertiesFile.exists()) {
+                keyAlias = keystoreProperties["keyAlias"] as String
+                keyPassword = keystoreProperties["keyPassword"] as String
+                storeFile = file(keystoreProperties["storeFile"] as String)
+                storePassword = keystoreProperties["storePassword"] as String
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            // key.properties가 있으면 릴리스 키로 서명, 없으면 debug 폴백(flutter run 유지).
+            signingConfig = if (keystorePropertiesFile.exists())
+                signingConfigs.getByName("release")
+            else
+                signingConfigs.getByName("debug")
+
+            // R8 minify 끔. Flutter 앱 용량은 Dart AOT/엔진이 대부분이라 자바/코틀린
+            // 축소 이득은 작은 반면, flutter_local_notifications(Gson TypeToken)·Kakao·
+            // Firebase 등 리플렉션 코드가 릴리스에서만 깨지는 위험이 크다.
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
 }

@@ -1,8 +1,13 @@
-import 'package:flutter/material.dart' show Color, DateUtils;
+import 'dart:ui' show Color;
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'dday_item.freezed.dart';
 part 'dday_item.g.dart';
+
+/// 시분초를 버리고 날짜만 남긴다. (도메인을 Flutter UI에 의존시키지 않기 위해
+/// material의 `DateUtils.dateOnly` 대신 순수 함수로 둔다.)
+DateTime _dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
 
 /// 알림 시점 옵션.
 enum DdayReminder {
@@ -55,7 +60,7 @@ abstract class DDayItem with _$DDayItem {
   /// 계산 기준 날짜. 매년 반복이면 다음 도래일(올해 지났으면 내년).
   DateTime get effectiveDate {
     if (!repeatYearly) return date;
-    final today = DateUtils.dateOnly(DateTime.now());
+    final today = _dateOnly(DateTime.now());
     var next = DateTime(today.year, date.month, date.day);
     if (next.isBefore(today)) {
       next = DateTime(today.year + 1, date.month, date.day);
@@ -65,8 +70,8 @@ abstract class DDayItem with _$DDayItem {
 
   /// 오늘 기준 남은(+)/지난(-) 일수
   int get daysFromToday {
-    final today = DateUtils.dateOnly(DateTime.now());
-    return DateUtils.dateOnly(effectiveDate).difference(today).inDays;
+    final today = _dateOnly(DateTime.now());
+    return _dateOnly(effectiveDate).difference(today).inDays;
   }
 
   /// 이번 도래일이 몇 주년인지. 매년 반복이 아니거나 첫 해면 null.
@@ -101,8 +106,8 @@ abstract class DDayItem with _$DDayItem {
     // 일반: 등록일 → 목표일 사이에서 얼마나 왔는지
     final created = createdAt;
     if (created == null) return null;
-    final total = DateUtils.dateOnly(effectiveDate)
-        .difference(DateUtils.dateOnly(created))
+    final total = _dateOnly(effectiveDate)
+        .difference(_dateOnly(created))
         .inDays;
     if (total <= 0) return null;
     return ((total - d) / total).clamp(0.0, 1.0);

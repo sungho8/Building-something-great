@@ -70,7 +70,27 @@ app_factory/
   - [x] 홈 위젯 — Android 완료. iOS는 Xcode 작업 필요 → `docs/HOME_WIDGET.md`
   - [x] Phase 1(세련화: 히어로 카드·D-DAY 강조·애니메이션·햅틱·스와이프삭제+실행취소·다크모드 수정)
   - [x] Phase 2(기능: 매년반복/N주년·이모지·다중알림·시작일포함·고정·부팅복원)
-  - [ ] Phase 3: 게스트모드/소셜로그인/Firebase, AdMob, 앱아이콘, 스토어 심사 — 미착수
+  - [~] Phase 3: 게스트모드·카카오로그인(커스텀토큰)·Firebase백업 ✅, AdMob(테스트ID) ✅, 앱아이콘 ✅
+        → 남은 배포 작업은 `docs/DEPLOY_CHECKLIST.md` (릴리스 서명·실광고ID·키해시·스토어 등록)
+- [~] 2번 앱 `apps/subscription` (구독 관리 트래커) — **로컬 MVP 개발 중**
+  - 기획/UX: `docs/SUBSCRIPTION_PLAN.md` + Notion "구독 관리 트래커 — 기획/UX 검수"
+  - 완료: 경량 3계층(Subscription 엔티티·repo·뷰모델) + 총액합산 + 알림 + Android 설정. analyze/test 통과(14개)
+  - **디자인 방향 확정(레퍼런스 기반 전면 재설계)**: 상단 스탯 타일 3종(이번달/활성/연간) + 아이콘 중심
+    **행(row) 리스트**(카테고리 색 사각 아이콘) + 카테고리 팝업 필터. 카드형·상태탭 폐기.
+  - ⚠️ **다크/라이트 자체 테마** (`lib/theme/sub_theme.dart`의 `SubColors` + `buildSubTheme`, `ThemeMode.system`).
+    공용 design_system은 흰배경 전용이라 이 앱만 자체 테마 사용. **홈·편집 모두 다크 대응 완료.**
+    재사용 폼 컴포넌트는 `lib/theme/sub_widgets.dart` (SubTextField/SubSegmented/SubChip/SubTile/SubButton).
+    design_system에선 토큰(AppSpacing/AppRadius/AppTypography)만 빌려 씀.
+  - 카테고리 아이콘: 지금은 Material 아이콘(임시), 추후 브랜드 asset 아이콘으로 교체 예정.
+  - **앱 런처 아이콘 완료**: 블루 배경 + 흰 카드(카드+스트라이프) 라인아트. `assets/icon/` +
+    flutter_launcher_icons(전역 실행, adaptive #3182F6, remove_alpha_ios). 생성 스크립트: 스크래치패드 Swift.
+  - 홈: 스탯 타일 3종 + 곧 결제 예정 가로 카러셀 + 카테고리 필터 + 행 리스트. 우상단 라이트/다크 토글.
+  - **홈 위젯(Android) ✅** (`SubscriptionWidgetProvider` + layout/xml/drawable + 매니페스트 리시버).
+  - **릴리스 서명 gradle 배선 ✅** (key.properties 있으면 릴리스, `key.properties.example` 제공, minify off).
+  - **스토어 에셋 ✅** (`apps/subscription/store/`: 512 아이콘·피처그래픽) + Notion(개인정보처리방침·스토어문구 초안).
+  - **배포 체크리스트: `docs/SUBSCRIPTION_DEPLOY.md`** (남은 건 키스토어 생성·실 AdMob ID·개인정보방침 공개·Play 등록 — 사용자 몫).
+  - 남은 코드: iOS 위젯·iOS 표시명. 백엔드(카카오·백업)=Phase 2.
+  - ⚠️ 로컬 온리 — 카카오/Firebase 미포함(backend 패키지 의존 안 함)
 
 ### 추가된 의존성
 - core: shared_preferences, flutter_local_notifications, timezone, flutter_timezone
@@ -104,6 +124,7 @@ app_factory/
 
 - 전략 전체: `docs/PLANNING.md`
 - 코드 컨벤션: `docs/CONVENTIONS.md`
+- 배포 체크리스트: `docs/DEPLOY_CHECKLIST.md`
 - 알려진 이슈·보류: `docs/KNOWN_ISSUES.md`
 - 홈 위젯 설정: `docs/HOME_WIDGET.md`
 - Notion 대시보드: https://github.com/sungho8/Building-something-great

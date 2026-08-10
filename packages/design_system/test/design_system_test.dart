@@ -21,7 +21,7 @@ void main() {
     );
 
     expect(theme.colorScheme.surfaceTint, Colors.transparent);
-    expect(theme.datePickerTheme?.backgroundColor, AppCommon.white);
+    expect(theme.datePickerTheme.backgroundColor, AppCommon.white);
   });
 
   test('buildTheme의 기본 폰트가 패키지 네임스페이스 접두사를 포함한다', () {

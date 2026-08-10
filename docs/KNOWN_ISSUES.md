@@ -26,7 +26,20 @@
 - **회귀 테스트:** `packages/design_system/test/design_system_test.dart` — 폰트 패밀리 접두사 검증 + 3개 굵기(Regular/SemiBold/Bold) 에셋 실제 로드 검증.
 - **상태:** ✅ 해결 (2026-07-06)
 
+## 3. 릴리스 빌드에서 R8 minify로 플러그인 크래시 (해결)
+
+- **증상:** `flutter build apk --release`로 만든 앱에서 일정 저장 시 크래시.
+  `PlatformException(... TypeToken must be created with a type argument ... code shrinkers (R8) ...)`
+  — `flutter_local_notifications`(Gson)가 알림 스케줄/취소 시 터짐. (2026-07, 실기기)
+- **원인:** 릴리스 빌드에 R8 minify가 켜져 Gson `TypeToken`의 제네릭 시그니처가 제거됨.
+  (스택의 `s3.a` 같은 난독화 이름이 증거.) Kakao·Firebase 등 리플렉션 코드도 같은 위험.
+- **해결:** `android/app/build.gradle.kts`의 release 블록에서 `isMinifyEnabled = false`,
+  `isShrinkResources = false`로 **minify를 끔**. Flutter 앱은 용량 대부분이 Dart AOT/엔진이라
+  자바/코틀린 축소 이득이 작고, 리플렉션 크래시 위험이 더 크다.
+- **양산 원칙:** 새 앱도 기본적으로 minify를 끈 채 출시한다. 굳이 켜야 하면
+  flutter_local_notifications/Gson/Kakao/Firebase/AdMob의 keep 규칙을 담은 `proguard-rules.pro`가 필수.
+
 ---
 
-> 두 항목 모두 "앱별 땜질"이 아니라 **공용 design_system 레이어에서 해결**하는 게 핵심.
+> 1·2번은 "앱별 땜질"이 아니라 **공용 design_system 레이어에서 해결**하는 게 핵심.
 > 디자인 시스템 정비 작업 시 이 문서를 먼저 확인할 것.

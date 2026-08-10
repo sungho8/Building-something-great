@@ -12,6 +12,7 @@ workspace:
   - packages/ads
   - packages/backend
   - apps/dday
+  - apps/subscription
   - gallery/showcase
 
 dev_dependencies:

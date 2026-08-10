@@ -65,6 +65,12 @@ class OnboardingController extends Notifier<bool> {
     await ref.read(localStoreProvider).setString(_key, 'true');
     state = true;
   }
+
+  /// 로그아웃 시 로그인 화면으로 되돌린다.
+  Future<void> reset() async {
+    await ref.read(localStoreProvider).setString(_key, 'false');
+    state = false;
+  }
 }
 
 /// D-Day 목록 상태.

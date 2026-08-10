@@ -7,7 +7,11 @@ import 'package:timezone/timezone.dart' as tz;
 ///
 /// 특정 날짜에 1회성 알림을 예약/취소한다. 타임존은 기기 로컬을 따른다.
 class NotificationService {
-  NotificationService(this._plugin);
+  /// [plugin] 생략 시 기본 인스턴스를 쓴다. 단위 테스트에서 이 서비스를 상속한
+  /// 페이크가 `flutter_local_notifications`를 직접 import하지 않고도 super()를
+  /// 호출할 수 있게 선택 인자로 둔다.
+  NotificationService([FlutterLocalNotificationsPlugin? plugin])
+      : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
 
   final FlutterLocalNotificationsPlugin _plugin;
 

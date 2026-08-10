@@ -1,0 +1,12 @@
+# 릴리스 서명 키 설정 템플릿.
+# 이 파일을 복사해 android/key.properties 로 만들고 실제 값을 채운다.
+#   cp key.properties.example key.properties
+# key.properties 는 .gitignore 로 커밋되지 않는다 (비밀번호 포함).
+#
+# storeFile 은 키스토어(.jks) 경로. repo 밖 안전한 곳(예: 홈 디렉터리)에 두는 걸 권장.
+# 절대경로 또는 android/app 기준 상대경로.
+
+storePassword=YOUR_STORE_PASSWORD
+keyPassword=YOUR_KEY_PASSWORD
+keyAlias=upload
+storeFile=/Users/parksungho/keys/dday-upload.jks

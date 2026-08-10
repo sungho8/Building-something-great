@@ -12,10 +12,13 @@ import 'app_user.dart';
 /// (Cloud Function)로 보내 Firebase 커스텀 토큰을 받아 로그인한다.
 /// [authFunctionUrl]에 그 함수 URL을 넣어야 Kakao 로그인이 동작한다.
 class AuthService {
-  AuthService({FirebaseAuth? auth, this.authFunctionUrl})
-      : _auth = auth ?? FirebaseAuth.instance;
+  AuthService({FirebaseAuth? auth, this.authFunctionUrl}) : _injectedAuth = auth;
 
-  final FirebaseAuth _auth;
+  /// 주입된 인스턴스(테스트용). null이면 [FirebaseAuth.instance]를 **지연** 사용한다.
+  /// 생성자에서 즉시 참조하지 않아, Firebase 미초기화 환경(단위 테스트)에서도
+  /// 이 서비스를 상속한 페이크를 만들 수 있다.
+  final FirebaseAuth? _injectedAuth;
+  FirebaseAuth get _auth => _injectedAuth ?? FirebaseAuth.instance;
 
   /// 카카오 access token → Firebase 커스텀 토큰 교환 Cloud Function URL.
   final String? authFunctionUrl;

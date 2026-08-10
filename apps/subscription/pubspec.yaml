@@ -1,0 +1,47 @@
+name: subscription
+description: "구독 관리 트래커 — App Factory 두 번째 제품."
+publish_to: 'none'
+version: 1.0.0+1
+resolution: workspace
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # 공용 패키지 (워크스페이스에서 로컬 resolve)
+  design_system: ^0.0.1
+  core: ^0.0.1
+  ads: ^0.0.1
+
+  flutter_riverpod: ^2.5.1
+  home_widget: ^0.7.0
+  intl: ^0.20.0
+  freezed_annotation: ^3.0.0
+  json_annotation: ^4.12.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  shared_preferences: ^2.3.0 # 테스트에서 직접 사용
+  build_runner: ^2.4.13
+  freezed: ^3.0.0
+  json_serializable: ^6.8.0
+
+flutter:
+  uses-material-design: true
+
+# 런처 아이콘 생성 (도구는 전역 설치 — melos와 cli_util 충돌 회피):
+#   dart pub global run flutter_launcher_icons   (apps/subscription 에서)
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
+  adaptive_icon_background: "#3182F6"
+  adaptive_icon_foreground: "assets/icon/icon_foreground.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
