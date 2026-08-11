@@ -91,6 +91,17 @@ app_factory/
   - **배포 체크리스트: `docs/SUBSCRIPTION_DEPLOY.md`** (남은 건 키스토어 생성·실 AdMob ID·개인정보방침 공개·Play 등록 — 사용자 몫).
   - 남은 코드: iOS 위젯·iOS 표시명. 백엔드(카카오·백업)=Phase 2.
   - ⚠️ 로컬 온리 — 카카오/Firebase 미포함(backend 패키지 의존 안 함)
+  - AdMob 실 ID·릴리스 키스토어·알림 채널명 반영 완료(App ID ~4333782621).
+- [~] 3번 앱 `apps/quit` (하루더 — 금연·금주·커스텀 끊기) — **로컬 MVP 개발 중**
+  - 기획/UX: `docs/QUIT_PLAN.md` + Notion "하루더 — 기획/UX"
+  - 도메인 `QuitItem`: 경과·절약액·회피량·건강 이정표(type별)·최고기록. 테스트 12개 통과.
+  - ⭐ **핵심: 토스식 단계별 생성 마법사** (`quit_create_wizard.dart`) — 종류→(이름)→시점→소비량→확인,
+    **AnimatedSwitcher 슬라이드+페이드 부드러운 전환** + 진행바 + 선택 시 자동전환 + 햅틱. **수정은 별도 폼**(리셋·삭제).
+  - 홈: 대표목표 히어로(D+·절약액·다음 이정표) + 스탯 타일 + 다른 목표 카드. 라이트/다크 토글.
+  - 테마: 자체 그린 다크/라이트 (`lib/theme/ui_theme.dart` UiColors + ui_widgets.dart Ui*). subscription의 SubColors와
+    별개 — 나중에 **둘을 공용 패키지로 추출 예정**(이번엔 subscription 안정 위해 보류).
+  - 홈 위젯(Android)·앱아이콘(그린 원+체크)·릴리스 서명 배선·AdMob(테스트ID) 완료. analyze/test 통과.
+  - 남음: 실 AdMob ID·스토어 에셋·개인정보방침·Play 등록. 알림(응원/이정표)=후속.
 
 ### 추가된 의존성
 - core: shared_preferences, flutter_local_notifications, timezone, flutter_timezone

@@ -1,0 +1,5 @@
+# 릴리스 서명 키 설정 템플릿. 복사해서 android/key.properties 로 만들고 값 채우기.
+storePassword=YOUR_STORE_PASSWORD
+keyPassword=YOUR_KEY_PASSWORD
+keyAlias=upload
+storeFile=/Users/parksungho/keys/quit-upload.jks
