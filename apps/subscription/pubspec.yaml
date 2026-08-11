@@ -16,6 +16,7 @@ dependencies:
   design_system: ^0.0.1
   core: ^0.0.1
   ads: ^0.0.1
+  app_theme: ^0.0.1
 
   flutter_riverpod: ^2.5.1
   home_widget: ^0.7.0

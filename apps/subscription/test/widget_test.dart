@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:subscription/di/subscription_providers.dart';
 import 'package:subscription/presentation/views/subscription_list_view.dart';
-import 'package:subscription/theme/sub_theme.dart';
+import 'package:app_theme/app_theme.dart';
 
 void main() {
   testWidgets('빈 목록이면 안내 문구와 추가 버튼이 보인다', (tester) async {
@@ -16,7 +16,7 @@ void main() {
       ProviderScope(
         overrides: [localStoreProvider.overrideWithValue(store)],
         child: MaterialApp(
-          theme: buildSubTheme(Brightness.light),
+          theme: buildUiTheme(Brightness.light, accent: const Color(0xFF3182F6)),
           home: const SubscriptionListView(),
         ),
       ),

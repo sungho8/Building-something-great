@@ -1,7 +1,7 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../theme/sub_theme.dart';
+import 'package:app_theme/app_theme.dart';
 import '../../utils/currency_format.dart';
 
 /// 상단 요약 스탯 3종 — 이번 달 / 활성 / 연간.
@@ -17,7 +17,7 @@ class StatTiles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = SubColors.of(context);
+    final c = UiColors.of(context);
     return Row(
       children: [
         _Tile(
@@ -43,7 +43,7 @@ class _Tile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = SubColors.of(context);
+    final c = UiColors.of(context);
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(

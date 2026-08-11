@@ -6,8 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../di/quit_providers.dart';
 import '../../domain/entities/quit_item.dart';
-import '../../theme/ui_theme.dart';
-import '../../theme/ui_widgets.dart';
+import 'package:app_theme/app_theme.dart';
 import '../quit_type_style.dart';
 
 const _typeLabels = {

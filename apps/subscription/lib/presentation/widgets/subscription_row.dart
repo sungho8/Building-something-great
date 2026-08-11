@@ -2,7 +2,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/subscription.dart';
-import '../../theme/sub_theme.dart';
+import 'package:app_theme/app_theme.dart';
 import '../../utils/currency_format.dart';
 import '../category_style.dart';
 
@@ -23,7 +23,7 @@ class SubscriptionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = SubColors.of(context);
+    final c = UiColors.of(context);
     final cat = CategoryStyle.colorOf(item);
     final paused = !item.active;
     final imminent = item.active && item.daysUntilPayment <= 3;

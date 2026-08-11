@@ -25,7 +25,9 @@ app_factory/
 │   ├── design_system/   ← 브랜드 무지한 공용 위젯·토큰 (BrandConfig 주입)
 │   ├── core/            ← 저장·알림 공용 인프라 (모든 앱)
 │   ├── ads/             ← AdMob (옵트인, Firebase 불필요)
-│   └── backend/         ← Firebase 인증(게스트·Google)+Firestore 동기화 (옵트인)
+│   ├── backend/         ← Firebase 인증(게스트·Google)+Firestore 동기화 (옵트인)
+│   └── app_theme/       ← 공용 다크/라이트 테마 + 폼 컴포넌트(Ui*). accent만 앱별 주입.
+│                          design_system(흰배경 전용)과 달리 라이트/다크 지원. subscription·quit 사용.
 ├── apps/
 │   ├── dday/            ← 경량 3계층 (domain/data/presentation) + Riverpod
 │   └── subscription/

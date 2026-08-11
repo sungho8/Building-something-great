@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:quit/di/quit_providers.dart';
 import 'package:quit/presentation/views/quit_home_view.dart';
-import 'package:quit/theme/ui_theme.dart';
+import 'package:app_theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -16,7 +16,7 @@ void main() {
       ProviderScope(
         overrides: [localStoreProvider.overrideWithValue(store)],
         child: MaterialApp(
-          theme: buildUiTheme(Brightness.light),
+          theme: buildUiTheme(Brightness.light, accent: const Color(0xFF12B76A)),
           home: const QuitHomeView(),
         ),
       ),

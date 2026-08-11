@@ -3,7 +3,7 @@ import 'package:design_system/design_system.dart'
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/quit_item.dart';
-import '../../theme/ui_theme.dart';
+import 'package:app_theme/app_theme.dart';
 import '../../utils/format.dart';
 import '../quit_type_style.dart';
 

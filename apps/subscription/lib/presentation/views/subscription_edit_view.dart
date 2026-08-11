@@ -6,8 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../di/subscription_providers.dart';
 import '../../domain/entities/subscription.dart';
-import '../../theme/sub_theme.dart';
-import '../../theme/sub_widgets.dart';
+import 'package:app_theme/app_theme.dart';
 import '../../utils/currency_format.dart';
 import '../category_style.dart';
 
@@ -112,7 +111,7 @@ class _SubscriptionEditViewState extends ConsumerState<SubscriptionEditView> {
   }
 
   void _toast(String message) {
-    final c = SubColors.of(context);
+    final c = UiColors.of(context);
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(
@@ -158,7 +157,7 @@ class _SubscriptionEditViewState extends ConsumerState<SubscriptionEditView> {
   }
 
   Future<void> _delete() async {
-    final c = SubColors.of(context);
+    final c = UiColors.of(context);
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -190,7 +189,7 @@ class _SubscriptionEditViewState extends ConsumerState<SubscriptionEditView> {
 
   @override
   Widget build(BuildContext context) {
-    final c = SubColors.of(context);
+    final c = UiColors.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -208,21 +207,21 @@ class _SubscriptionEditViewState extends ConsumerState<SubscriptionEditView> {
             AppSpacing.s20, AppSpacing.s16, AppSpacing.s20, AppSpacing.s32),
         children: [
           if (!_isEditing) ...[
-            const SubSectionLabel('빠른 추가'),
+            const UiSectionLabel('빠른 추가'),
             _PresetDropdown(onSelected: _applyPreset),
             const SizedBox(height: AppSpacing.s24),
           ],
 
-          const SubSectionLabel('서비스명'),
-          SubTextField(
+          const UiSectionLabel('서비스명'),
+          UiTextField(
             controller: _nameController,
             hint: '예: 넷플릭스',
             textInputAction: TextInputAction.next,
           ),
           const SizedBox(height: AppSpacing.s20),
 
-          const SubSectionLabel('금액'),
-          SubTextField(
+          const UiSectionLabel('금액'),
+          UiTextField(
             controller: _amountController,
             hint: '13500',
             prefixText: '₩ ',
@@ -232,19 +231,19 @@ class _SubscriptionEditViewState extends ConsumerState<SubscriptionEditView> {
           ),
           const SizedBox(height: AppSpacing.s20),
 
-          const SubSectionLabel('결제 주기'),
-          SubSegmented<BillingCycle>(
+          const UiSectionLabel('결제 주기'),
+          UiSegmented<BillingCycle>(
             value: _cycle,
             onChanged: (v) => setState(() => _cycle = v),
             segments: [
               for (final cy in BillingCycle.values)
-                SubSegment(value: cy, label: _cycleLabels[cy]!),
+                UiSegment(value: cy, label: _cycleLabels[cy]!),
             ],
           ),
           const SizedBox(height: AppSpacing.s20),
 
-          const SubSectionLabel('기준 결제일'),
-          SubTile(
+          const UiSectionLabel('기준 결제일'),
+          UiTile(
             icon: Icons.event_outlined,
             title: '결제일',
             value: cycleDateLabel(_firstPaymentDate, _cycle.index),
@@ -252,13 +251,13 @@ class _SubscriptionEditViewState extends ConsumerState<SubscriptionEditView> {
           ),
           const SizedBox(height: AppSpacing.s20),
 
-          const SubSectionLabel('카테고리'),
+          const UiSectionLabel('카테고리'),
           Wrap(
             spacing: AppSpacing.s8,
             runSpacing: AppSpacing.s8,
             children: [
               for (final cat in SubscriptionCategory.values)
-                SubChip(
+                UiChip(
                   label: CategoryStyle.label(cat),
                   icon: CategoryStyle.icon(cat),
                   selected: _category == cat,
@@ -269,12 +268,12 @@ class _SubscriptionEditViewState extends ConsumerState<SubscriptionEditView> {
           ),
           const SizedBox(height: AppSpacing.s20),
 
-          const SubSectionLabel('알림'),
+          const UiSectionLabel('알림'),
           Wrap(
             spacing: AppSpacing.s8,
             children: [
               for (final r in SubReminder.values)
-                SubChip(
+                UiChip(
                   label: _reminderLabels[r]!,
                   selected: _reminders.contains(r),
                   onTap: () => setState(() {
@@ -315,7 +314,7 @@ class _SubscriptionEditViewState extends ConsumerState<SubscriptionEditView> {
 
           const SizedBox(height: AppSpacing.s32),
 
-          SubButton(label: '저장', icon: Icons.check, onPressed: _save),
+          UiButton(label: '저장', icon: Icons.check, onPressed: _save),
         ],
       ),
     );
@@ -330,7 +329,7 @@ class _PresetDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = SubColors.of(context);
+    final c = UiColors.of(context);
     return PopupMenuButton<_Preset>(
       onSelected: onSelected,
       offset: const Offset(0, 56),

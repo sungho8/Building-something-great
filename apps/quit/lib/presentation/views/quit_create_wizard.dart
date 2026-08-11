@@ -6,8 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../di/quit_providers.dart';
 import '../../domain/entities/quit_item.dart';
-import '../../theme/ui_theme.dart';
-import '../../theme/ui_widgets.dart';
+import 'package:app_theme/app_theme.dart';
 import '../../utils/format.dart';
 import '../quit_type_style.dart';
 
@@ -172,18 +171,28 @@ class _QuitCreateWizardState extends ConsumerState<QuitCreateWizard> {
             ),
             Expanded(
               child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 320),
+                duration: const Duration(milliseconds: 340),
+                reverseDuration: const Duration(milliseconds: 240),
                 switchInCurve: Curves.easeOutCubic,
                 switchOutCurve: Curves.easeInCubic,
+                // 이전 단계는 제자리에서 페이드아웃, 새 단계만 슬라이드+스케일로 부드럽게.
+                layoutBuilder: (currentChild, previousChildren) => Stack(
+                  alignment: Alignment.topCenter,
+                  children: [...previousChildren, ?currentChild],
+                ),
                 transitionBuilder: (child, anim) {
-                  final dx = _forward ? 0.14 : -0.14;
+                  final dx = _forward ? 0.10 : -0.10;
                   final slide = Tween<Offset>(
                     begin: Offset(dx, 0),
                     end: Offset.zero,
                   ).animate(anim);
+                  final scale = Tween<double>(begin: 0.98, end: 1.0).animate(anim);
                   return FadeTransition(
                     opacity: anim,
-                    child: SlideTransition(position: slide, child: child),
+                    child: SlideTransition(
+                      position: slide,
+                      child: ScaleTransition(scale: scale, child: child),
+                    ),
                   );
                 },
                 child: KeyedSubtree(

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'di/quit_providers.dart';
 import 'presentation/views/quit_home_view.dart';
-import 'theme/ui_theme.dart';
+import 'package:app_theme/app_theme.dart';
 
 /// 앱 루트. 라이트/다크를 사용자 설정(없으면 시스템)에 따라 전환.
 class QuitApp extends ConsumerWidget {
@@ -15,8 +15,8 @@ class QuitApp extends ConsumerWidget {
     return MaterialApp(
       title: '하루더',
       debugShowCheckedModeBanner: false,
-      theme: buildUiTheme(Brightness.light),
-      darkTheme: buildUiTheme(Brightness.dark),
+      theme: buildUiTheme(Brightness.light, accent: const Color(0xFF12B76A)),
+      darkTheme: buildUiTheme(Brightness.dark, accent: const Color(0xFF3CCB8A)),
       themeMode: themeMode,
       home: const QuitHomeView(),
     );

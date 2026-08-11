@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'di/subscription_providers.dart';
 import 'presentation/views/subscription_list_view.dart';
-import 'theme/sub_theme.dart';
+import 'package:app_theme/app_theme.dart';
 
 /// 앱 루트. 라이트/다크 테마를 사용자 설정(없으면 시스템)에 따라 전환한다.
 class SubscriptionApp extends ConsumerWidget {
@@ -15,8 +15,8 @@ class SubscriptionApp extends ConsumerWidget {
     return MaterialApp(
       title: '구독노트',
       debugShowCheckedModeBanner: false,
-      theme: buildSubTheme(Brightness.light),
-      darkTheme: buildSubTheme(Brightness.dark),
+      theme: buildUiTheme(Brightness.light, accent: const Color(0xFF3182F6)),
+      darkTheme: buildUiTheme(Brightness.dark, accent: const Color(0xFF4C8DFF)),
       themeMode: themeMode,
       home: const SubscriptionListView(),
     );

@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../config/ad_config.dart';
 import '../../di/subscription_providers.dart';
 import '../../domain/entities/subscription.dart';
-import '../../theme/sub_theme.dart';
+import 'package:app_theme/app_theme.dart';
 import '../category_style.dart';
 import '../widgets/stat_tiles.dart';
 import '../widgets/subscription_row.dart';
@@ -28,7 +28,7 @@ class _SubscriptionListViewState extends ConsumerState<SubscriptionListView> {
 
   @override
   Widget build(BuildContext context) {
-    final c = SubColors.of(context);
+    final c = UiColors.of(context);
     final all = ref.watch(subscriptionListProvider);
     final total = ref.watch(monthlyTotalProvider);
     final activeCount = ref.watch(activeCountProvider);
@@ -121,7 +121,7 @@ class _SubscriptionListViewState extends ConsumerState<SubscriptionListView> {
   }
 
   Widget _emptyState(BuildContext context, bool allEmpty) {
-    final c = SubColors.of(context);
+    final c = UiColors.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.s32),
@@ -208,7 +208,7 @@ class _CategoryFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = SubColors.of(context);
+    final c = UiColors.of(context);
     final label = selected == null ? '전체' : CategoryStyle.label(selected!);
 
     return PopupMenuButton<SubscriptionCategory?>(
