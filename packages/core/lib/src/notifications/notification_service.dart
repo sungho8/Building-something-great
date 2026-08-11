@@ -10,16 +10,25 @@ class NotificationService {
   /// [plugin] 생략 시 기본 인스턴스를 쓴다. 단위 테스트에서 이 서비스를 상속한
   /// 페이크가 `flutter_local_notifications`를 직접 import하지 않고도 super()를
   /// 호출할 수 있게 선택 인자로 둔다.
-  NotificationService([FlutterLocalNotificationsPlugin? plugin])
-      : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
+  /// [plugin] 생략 시 기본 인스턴스를 쓴다(단위 테스트 페이크용).
+  /// [channelId]/[channelName]은 앱마다 다르게 준다(공용 인프라이므로).
+  NotificationService({
+    FlutterLocalNotificationsPlugin? plugin,
+    this.channelId = 'reminders',
+    this.channelName = '알림',
+  }) : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
 
   final FlutterLocalNotificationsPlugin _plugin;
 
-  static const _channelId = 'dday_channel';
-  static const _channelName = '날짜 알림';
+  /// Android 알림 채널 id/이름. 앱별로 지정한다.
+  final String channelId;
+  final String channelName;
 
   /// 앱 시작 시 한 번 호출. 타임존 초기화 + 플러그인 초기화.
-  static Future<NotificationService> create() async {
+  static Future<NotificationService> create({
+    String channelId = 'reminders',
+    String channelName = '알림',
+  }) async {
     tzdata.initializeTimeZones();
     try {
       final localName = await FlutterTimezone.getLocalTimezone();
@@ -34,7 +43,8 @@ class NotificationService {
       iOS: DarwinInitializationSettings(),
     );
     await plugin.initialize(settings);
-    return NotificationService(plugin);
+    return NotificationService(
+        plugin: plugin, channelId: channelId, channelName: channelName);
   }
 
   /// 알림 권한 요청 (Android 13+ / iOS).
@@ -65,14 +75,14 @@ class NotificationService {
       title,
       body,
       tz.TZDateTime.from(when, tz.local),
-      const NotificationDetails(
+      NotificationDetails(
         android: AndroidNotificationDetails(
-          _channelId,
-          _channelName,
+          channelId,
+          channelName,
           importance: Importance.max,
           priority: Priority.high,
         ),
-        iOS: DarwinNotificationDetails(),
+        iOS: const DarwinNotificationDetails(),
       ),
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:

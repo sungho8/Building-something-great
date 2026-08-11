@@ -14,7 +14,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final store = await LocalStore.create();
-  final notifications = await NotificationService.create();
+  final notifications = await NotificationService.create(
+    channelId: 'dday_channel',
+    channelName: '날짜 알림',
+  );
   await notifications.requestPermissions();
   await AdsService.initialize();
   initKakao(dDayKakaoNativeAppKey);

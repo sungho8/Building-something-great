@@ -10,7 +10,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final store = await LocalStore.create();
-  final notifications = await NotificationService.create();
+  final notifications = await NotificationService.create(
+    channelId: 'subscription_reminders',
+    channelName: '구독 결제 알림',
+  );
   await notifications.requestPermissions();
   await AdsService.initialize();
 
