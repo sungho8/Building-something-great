@@ -148,4 +148,7 @@ abstract class QuitItem with _$QuitItem {
 
   /// KeyColor. null이면 브랜드색 사용.
   Color? get color => colorValue == null ? null : Color(colorValue!);
+
+  /// 이정표 슬롯별 32비트 정수 알림 id (슬롯당 최대 16개).
+  int notificationIdFor(int slot) => (id.hashCode & 0x1FFFFFF) * 16 + slot;
 }

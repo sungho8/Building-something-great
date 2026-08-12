@@ -66,15 +66,29 @@ class NotificationService {
     required String body,
     required DateTime date,
     int hour = 9,
+  }) =>
+      scheduleAt(
+        id: id,
+        title: title,
+        body: body,
+        dateTime: DateTime(date.year, date.month, date.day, hour),
+      );
+
+  /// [dateTime] 정각(시각 포함)에 알림을 예약한다. 과거면 예약하지 않는다.
+  /// 부정확 허용(정확 알람 권한 불필요) — 이정표 축하 등 분 단위 오차는 무방.
+  Future<void> scheduleAt({
+    required int id,
+    required String title,
+    required String body,
+    required DateTime dateTime,
   }) async {
-    final when = DateTime(date.year, date.month, date.day, hour);
-    if (when.isBefore(DateTime.now())) return;
+    if (dateTime.isBefore(DateTime.now())) return;
 
     await _plugin.zonedSchedule(
       id,
       title,
       body,
-      tz.TZDateTime.from(when, tz.local),
+      tz.TZDateTime.from(dateTime, tz.local),
       NotificationDetails(
         android: AndroidNotificationDetails(
           channelId,

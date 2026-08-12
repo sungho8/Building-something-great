@@ -102,8 +102,10 @@ app_factory/
   - 홈: 대표목표 히어로(D+·절약액·다음 이정표) + 스탯 타일 + 다른 목표 카드. 라이트/다크 토글.
   - 테마: 자체 그린 다크/라이트 (`lib/theme/ui_theme.dart` UiColors + ui_widgets.dart Ui*). subscription의 SubColors와
     별개 — 나중에 **둘을 공용 패키지로 추출 예정**(이번엔 subscription 안정 위해 보류).
-  - 홈 위젯(Android)·앱아이콘(그린 원+체크)·릴리스 서명 배선·AdMob(테스트ID) 완료. analyze/test 통과.
-  - 남음: 실 AdMob ID·스토어 에셋·개인정보방침·Play 등록. 알림(응원/이정표)=후속.
+  - 홈 위젯(Android)·앱아이콘(그린 원+체크)·릴리스 서명 배선·AdMob(테스트ID)·스토어 에셋(512·피처그래픽)·
+    Notion(개인정보방침·스토어문구)·**이정표 달성 알림**(core `scheduleAt` 추가) 완료. analyze/test 통과(15개).
+  - **출시 전 남은 건 전부 사용자 몫**: 실 AdMob ID·키스토어 생성·개인정보방침 공개·스크린샷·Play 등록 (`docs/QUIT_DEPLOY.md`).
+  - 후속(선택): 매일 응원 리마인드(반복 알림), iOS.
 
 ### 추가된 의존성
 - core: shared_preferences, flutter_local_notifications, timezone, flutter_timezone
