@@ -23,6 +23,7 @@ class QuitCreateWizard extends ConsumerStatefulWidget {
 class _QuitCreateWizardState extends ConsumerState<QuitCreateWizard> {
   int _index = 0;
   bool _forward = true;
+  bool _submitting = false; // 저장 연타로 목표가 중복 생성되는 것 방지
 
   QuitType? _type;
   DateTime? _quitDate;
@@ -80,8 +81,10 @@ class _QuitCreateWizardState extends ConsumerState<QuitCreateWizard> {
 
   void _pickType(QuitType t) {
     setState(() => _type = t);
+    // 카드를 빠르게 두 번 누르면 지연 콜백이 두 번 돌아 단계를 건너뛴다.
+    // 콜백 시점에도 여전히 '종류' 단계일 때만 다음으로 넘어간다.
     Future.delayed(const Duration(milliseconds: 160), () {
-      if (mounted) _next();
+      if (mounted && _cur == _Step.type) _next();
     });
   }
 
@@ -123,6 +126,8 @@ class _QuitCreateWizardState extends ConsumerState<QuitCreateWizard> {
   }
 
   Future<void> _finish() async {
+    if (_submitting) return;
+    _submitting = true;
     final (cost, units, unit) = _computeAmount();
     final name = switch (_type!) {
       QuitType.smoking => '담배',

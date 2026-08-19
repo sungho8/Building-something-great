@@ -9,6 +9,16 @@ part 'dday_item.g.dart';
 /// material의 `DateUtils.dateOnly` 대신 순수 함수로 둔다.)
 DateTime _dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
 
+/// 해당 연·월의 일수.
+int _daysInMonth(int year, int month) => DateTime(year, month + 1, 0).day;
+
+/// day를 해당 월의 마지막 날로 clamp. (2월 29일 기념일이 평년에 3월 1일로
+/// 밀리는 것을 막는다 — Dart의 DateTime은 넘치는 일수를 다음 달로 굴린다.)
+DateTime _clampDay(int year, int month, int day) {
+  final last = _daysInMonth(year, month);
+  return DateTime(year, month, day > last ? last : day);
+}
+
 /// 알림 시점 옵션.
 enum DdayReminder {
   /// 당일 오전 9시
@@ -61,9 +71,9 @@ abstract class DDayItem with _$DDayItem {
   DateTime get effectiveDate {
     if (!repeatYearly) return date;
     final today = _dateOnly(DateTime.now());
-    var next = DateTime(today.year, date.month, date.day);
+    var next = _clampDay(today.year, date.month, date.day);
     if (next.isBefore(today)) {
-      next = DateTime(today.year + 1, date.month, date.day);
+      next = _clampDay(today.year + 1, date.month, date.day);
     }
     return next;
   }

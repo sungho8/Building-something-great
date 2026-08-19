@@ -81,7 +81,8 @@ abstract class Subscription with _$Subscription {
     switch (cycle) {
       case BillingCycle.weekly:
         final elapsed = today.difference(first).inDays;
-        final periods = (elapsed / 7).floor() + 1;
+        // ceil: 오늘이 정확히 결제일(7의 배수)이면 오늘을 그대로 쓴다(D-DAY).
+        final periods = (elapsed / 7).ceil();
         var next = first.add(Duration(days: 7 * periods));
         while (next.isBefore(today)) {
           next = next.add(const Duration(days: 7));

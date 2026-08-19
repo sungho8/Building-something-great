@@ -43,6 +43,18 @@ void main() {
     expect(item.anniversaryYears, isNotNull);
   });
 
+  test('매년 반복 — 2월 29일 기념일은 평년에 2월 말로 clamp(회귀)', () {
+    final item = DDayItem(
+      id: 'leap',
+      title: '윤년 기념일',
+      date: DateTime(2024, 2, 29),
+      repeatYearly: true,
+    );
+    // 3월 1일로 밀리지 않아야 한다.
+    expect(item.effectiveDate.month, 2);
+    expect(item.daysFromToday, greaterThanOrEqualTo(0));
+  });
+
   test('진행률 — 등록일 대비 절반 지점은 약 0.5', () {
     final now = DateTime.now();
     final item = DDayItem(

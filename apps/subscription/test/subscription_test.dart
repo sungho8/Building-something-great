@@ -80,6 +80,16 @@ void main() {
       expect(n.isBefore(_dOnly(DateTime.now())), isFalse);
     });
 
+    test('주 구독 — 오늘이 정확히 결제일이면 D-DAY(회귀)', () {
+      // 기준일이 정확히 4주 전 → 오늘이 결제일이어야 한다.
+      final s = _sub(
+        firstPaymentDate: DateTime.now().subtract(const Duration(days: 28)),
+        cycle: BillingCycle.weekly,
+      );
+      expect(s.daysUntilPayment, 0);
+      expect(s.paymentLabel, 'D-DAY');
+    });
+
     test('daysUntilPayment는 항상 0 이상', () {
       expect(_sub().daysUntilPayment, greaterThanOrEqualTo(0));
     });
